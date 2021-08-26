@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "RDV_Conduite",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

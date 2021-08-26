@@ -1,0 +1,8 @@
+{
+  "name": "RDV_Conduite",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "6f86e10e"
+}
