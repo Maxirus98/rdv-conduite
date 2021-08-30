@@ -1,4 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import LessonContainer from '../components/LessonContainer';
 import Scheduler from '../components/Scheduler';
 import './Tab1.css';
 
@@ -10,12 +11,13 @@ const Tab1: React.FC = () => {
           <IonTitle>Grille des rendez-vous</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen={false}>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Horaire</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <LessonContainer />
         <Scheduler />
       </IonContent>
     </IonPage>

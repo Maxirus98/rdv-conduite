@@ -1,14 +1,30 @@
-import React from 'react'
-import { IonButton, IonPicker } from '@ionic/react'
-import Calendar from './Calendar'
+import React from 'react';
+import Calendar from './Calendar';
 
-export default class Scheduler extends React.Component<{}, {}> {
+interface ISchedulerProps {
+
+}
+
+interface ISchedulerState {
+}
+export default class Scheduler extends React.Component<ISchedulerProps, ISchedulerState> {
+    constructor(props: ISchedulerProps) {
+        super(props);
+
+        this.state = {
+
+        }
+    }
     render() {
         return (
             <>
-                <IonButton id="createLesson">Créer un cours à l'horaire</IonButton>
-                <Calendar />
+                <Calendar handleShowLesson={this.addStudentToLesson} />
             </>
         )
     }
+
+    private addStudentToLesson() {
+        console.log("Adding student to lesson");
+    }
+
 }

@@ -1,14 +1,17 @@
-import FullCalendar, { EventInput } from "@fullcalendar/react";
+import FullCalendar, { EventInput, WindowScrollController } from "@fullcalendar/react";
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import React from "react";
 import { IonPicker } from "@ionic/react";
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+import { Lessons } from "../modals/Lessons";
+import ILesson from "../modals/ILesson";
 
 interface ICalendarState {
-    lesson: EventInput[];
+    lessons: EventInput[];
 }
 
 interface ICalendarProps {
+    handleShowLesson: () => void;
 }
 
 export default class Calendar extends React.Component<ICalendarProps, ICalendarState> {
@@ -16,14 +19,16 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         super(props);
 
         this.state = {
-            lesson: [
+            lessons: [
                 { title: 'event 1', date: '2021-08-21' },
                 { title: 'event 2', date: '2021-08-22' }
             ]
         }
     }
-    render() {
-        const { lesson } = this.state;
+
+    public render(): JSX.Element {
+        const { handleShowLesson } = this.props;
+        const { lessons } = this.state;
         // I want to drag events to reschedule events with NO STUDENTS
         return (
             <>
@@ -42,9 +47,10 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     dateClick={this.handleDateClick}
                     selectMirror={true}
                     unselectAuto={true}
-                    events={lesson}
+                    events={lessons}
+                    eventDrop={this.handleEventDrop}
                     dayMaxEventRows={true}
-                    eventClick={this.onEventClick}
+                    eventClick={handleShowLesson}
                     dayMaxEvents={true}
                     weekends={true}
                     buttonText={{
@@ -58,16 +64,14 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         );
     }
 
-    private handleDateClick(): void {
-        alert("date clicked");
+    // Change the Date on Drop.
+    private handleEventDrop = (): void => {
+        const { lessons } = this.state
+        this.setState({ lessons });
+        console.log("lessons", lessons);
     }
 
-    private onEventClick(): JSX.Element {
-        // Ouvrir un dialog ou panel pour modifier le cours.
-        return (
-            <>
-                <IonPicker columns={[{ name: "Cours1", options: [] }]} isOpen={true} />
-            </>
-        )
+    private handleDateClick(): void {
+        alert("date clicked");
     }
 }
