@@ -1,8 +1,6 @@
+import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonCol, IonRow } from '@ionic/react';
 import React, { Component } from 'react';
-import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonCol, IonPicker, IonRow, PickerColumn } from '@ionic/react';
 import ILesson from '../modals/ILesson';
-import { Lessons } from '../modals/Lessons';
-import { Draggable } from '@fullcalendar/interaction';
 
 interface ILessonProps {
 
@@ -13,7 +11,6 @@ interface ILessonState {
     lessons: ILesson[];
 }
 export default class LessonContainer extends Component<ILessonProps, ILessonState> {
-    private allLessons = Object.keys(Lessons);
     constructor(props: ILessonProps) {
         super(props);
 
@@ -27,7 +24,7 @@ export default class LessonContainer extends Component<ILessonProps, ILessonStat
         const { lessonPicker, lessons } = this.state;
         return (
             <>
-                <IonButton id="createLesson" onClick={this.showLessonPicker}>Créer un cours à l'horaire</IonButton>
+                <IonButton id="createLesson" onClick={() => { }}>Créer un cours à l'horaire</IonButton>
                 <IonRow id='external-events'>
                     {lessons.map(lesson => {
                         return <IonCol className="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event">
@@ -66,7 +63,7 @@ export default class LessonContainer extends Component<ILessonProps, ILessonStat
         this.setState({ lessons });
     }
 
-    private showLessonPicker = () => {
+    /*private showLessonPicker = () => {
         const { lessons } = this.state;
         this.setState({
             lessonPicker: <IonPicker
@@ -89,5 +86,5 @@ export default class LessonContainer extends Component<ILessonProps, ILessonStat
                 onDidDismiss={() => this.setState({ lessonPicker: <></> })}
             />
         })
-    }
+    }*/
 }

@@ -1,20 +1,20 @@
-import FullCalendar, { EventInput, WindowScrollController } from "@fullcalendar/react";
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import { Agenda, Day, Inject, Month, ScheduleComponent, Week, WorkWeek } from '@syncfusion/ej2-react-schedule';
+import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
+import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
 import React from "react";
-import { IonPicker } from "@ionic/react";
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import { Lessons } from "../modals/Lessons";
-import ILesson from "../modals/ILesson";
 
 interface ICalendarState {
-    lessons: EventInput[];
 }
 
 interface ICalendarProps {
     handleShowLesson: () => void;
 }
 
+
+
 export default class Calendar extends React.Component<ICalendarProps, ICalendarState> {
+
     constructor(props: ICalendarProps) {
         super(props);
 
@@ -27,51 +27,55 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     public render(): JSX.Element {
-        const { handleShowLesson } = this.props;
-        const { lessons } = this.state;
-        // I want to drag events to reschedule events with NO STUDENTS
         return (
             <>
-                <FullCalendar plugins={[dayGridPlugin, interactionPlugin]}
-                    locale='fr'
-                    headerToolbar={{
-                        left: 'today',
-                        center: 'title prev,next',
-                        right: 'dayGridMonth dayGridWeek dayGridDay'
-                    }}
-                    initialView='dayGridMonth'
-                    editable={true}
-                    selectable={true}
-                    droppable={true}
-                    longPressDelay={500}
-                    dateClick={this.handleDateClick}
-                    selectMirror={true}
-                    unselectAuto={true}
-                    events={lessons}
-                    eventDrop={this.handleEventDrop}
-                    dayMaxEventRows={true}
-                    eventClick={handleShowLesson}
-                    dayMaxEvents={true}
-                    weekends={true}
-                    buttonText={{
-                        today: 'Aujourd\'hui',
-                        month: 'Mois courant',
-                        week: 'Semaine courante',
-                        day: 'Jour'
-                    }}
-                />
+                <ScheduleComponent editorTemplate={this.getEditorTemplate.bind(this)}
+                    enableAllDayScroll={true}
+                    showWeekend={false}>
+                    <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
+                </ScheduleComponent>
             </>
         );
     }
 
-    // Change the Date on Drop.
-    private handleEventDrop = (): void => {
-        const { lessons } = this.state
-        this.setState({ lessons });
-        console.log("lessons", lessons);
-    }
+    private getEditorTemplate(props: any): JSX.Element {
+        return (
+            <table>
+                <tbody>
+                    <tr>
+                        <td className="e-textLabel">Module/Sortie</td>
+                        <td>
+                            <DropDownListComponent
+                                id="lessons"
+                                className="e-field e-input"
+                                data-name="Subject"
+                                dataSource={Object.keys(Lessons)}
+                                placeholder="Module/Sortie"
+                                value={props.Title || null}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="e-textlabel">From</td>
+                        <td><DateTimePickerComponent className="e-field" id="StartTime" data-name="StartTime"
+                            value={new Date(props.startTime || props.StartTime)}>
+                        </DateTimePickerComponent></td>
+                    </tr>
+                    <tr>
+                        <td className="e-textlabel">To</td>
+                        <td>
+                            <DateTimePickerComponent className="e-field" id="EndTime" data-name="EndTime"
+                                value={new Date(props.endTime || props.StartTime)}>
+                            </DateTimePickerComponent>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
 
-    private handleDateClick(): void {
-        alert("date clicked");
+            </table>
+        );
     }
 }
