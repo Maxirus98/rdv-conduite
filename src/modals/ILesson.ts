@@ -1,6 +1,7 @@
 import { Lessons } from "./Lessons";
 
 export default interface ILesson {
-    name: Lessons;
+    id: number;
+    descriptif: Lessons;
     date: Date;
 }

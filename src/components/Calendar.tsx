@@ -1,27 +1,39 @@
-import { Agenda, Day, Inject, Month, ScheduleComponent, Week, WorkWeek } from '@syncfusion/ej2-react-schedule';
-import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
+import { IonCol, IonFabButton, IonGrid, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonRow } from "@ionic/react";
 import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
+import { Agenda, Day, EventClickArgs, Inject, Month, PopupOpenEventArgs, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule';
+import { add } from "ionicons/icons";
 import React from "react";
+import ReactDOM from "react-dom";
+import { IUser } from "../modals/IUser";
 import { Lessons } from "../modals/Lessons";
 
 interface ICalendarState {
+    selectedEventData: Record<string, any>
+    selectedEventForm: JSX.Element[];
 }
 
 interface ICalendarProps {
-    handleShowLesson: () => void;
 }
 
-
+const ADD_STUDENT_FORM: JSX.Element =
+    <>
+        <IonItem>
+            <IonInput placeholder="Le prénom de l'étudiant"></IonInput>
+        </IonItem>
+        <IonItem>
+            <IonInput placeholder="Le nom de l'étudiant"></IonInput>
+        </IonItem>
+    </>
 
 export default class Calendar extends React.Component<ICalendarProps, ICalendarState> {
-
     constructor(props: ICalendarProps) {
         super(props);
 
         this.state = {
-            lessons: [
-                { title: 'event 1', date: '2021-08-21' },
-                { title: 'event 2', date: '2021-08-22' }
+            selectedEventData: null,
+            selectedEventForm: [
+                ADD_STUDENT_FORM
             ]
         }
     }
@@ -29,53 +41,109 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     public render(): JSX.Element {
         return (
             <>
-                <ScheduleComponent editorTemplate={this.getEditorTemplate.bind(this)}
-                    enableAllDayScroll={true}
-                    showWeekend={false}>
-                    <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
+                <ScheduleComponent
+                    showHeaderBar={false}
+                    popupOpen={(args: PopupOpenEventArgs) => {
+                        if (args.type == "QuickInfo") {
+                            this.replaceQuickInfoTemplate();
+                        }
+                    }}
+                    eventClick={(args: EventClickArgs) => {
+                        this.setState({ selectedEventData: args.event });
+                    }}
+                    editorTemplate={this.getEditorTemplate.bind(this)}
+                    cellDoubleClick={(args: PopupOpenEventArgs) => {
+                        args.cancel = true;
+                    }}
+                    showWeekend={false}
+                >
+                    <Inject services={[Day, Week, Month, Agenda]} />
                 </ScheduleComponent>
             </>
         );
     }
 
-    private getEditorTemplate(props: any): JSX.Element {
-        return (
-            <table>
-                <tbody>
-                    <tr>
-                        <td className="e-textLabel">Module/Sortie</td>
-                        <td>
-                            <DropDownListComponent
-                                id="lessons"
-                                className="e-field e-input"
-                                data-name="Subject"
-                                dataSource={Object.keys(Lessons)}
-                                placeholder="Module/Sortie"
-                                value={props.Title || null}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="e-textlabel">From</td>
-                        <td><DateTimePickerComponent className="e-field" id="StartTime" data-name="StartTime"
-                            value={new Date(props.startTime || props.StartTime)}>
-                        </DateTimePickerComponent></td>
-                    </tr>
-                    <tr>
-                        <td className="e-textlabel">To</td>
-                        <td>
-                            <DateTimePickerComponent className="e-field" id="EndTime" data-name="EndTime"
-                                value={new Date(props.endTime || props.StartTime)}>
-                            </DateTimePickerComponent>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
+    private replaceQuickInfoTemplate(): void {
+        var cellPopup = document.querySelector(".e-cell-popup");
+        var popupEventDetailsButton = document.querySelector(".e-event-details");
+        var editor = React.createElement(this.getAppointmentTemplate, this);
+        var popupContent;
 
-            </table>
+        if (cellPopup)
+            popupContent = cellPopup.querySelector(".e-popup-content");
+        if (popupContent)
+            ReactDOM.render(editor, popupContent);
+        if (popupEventDetailsButton)
+            ReactDOM.render(null, popupEventDetailsButton);
+    }
+
+    private getAppointmentTemplate(): JSX.Element {
+        return (
+            <IonGrid>
+                <IonRow>
+                    <IonCol>Module/Sortie</IonCol>
+                    <IonCol className="e-textLabel">
+                        <DropDownListComponent
+                            className="e-field e-input"
+                            data-name="Subject"
+                            dataSource={Object.keys(Lessons)}
+                            placeholder="Module/Sortie"
+                        /></IonCol>
+                </IonRow>
+            </IonGrid>
         );
+    }
+
+    private getEditorTemplate(): JSX.Element {
+        const { selectedEventData, selectedEventForm } = this.state;
+        return (
+            <IonGrid>
+                <IonRow>
+                    <IonCol>Module/Sortie</IonCol>
+                    <IonCol className="e-textLabel">
+                        <DropDownListComponent
+                            className="e-field e-input"
+                            data-name="Subject"
+                            dataSource={Object.keys(Lessons)}
+                            placeholder="Module/Sortie"
+                        /></IonCol>
+                </IonRow>
+                <IonRow>
+                    <IonCol className="e-textLabel">From</IonCol>
+                    <IonCol>
+                        <DateTimePickerComponent className="e-field" id="StartTime" data-name="StartTime"
+                        />
+                    </IonCol>
+                </IonRow>
+                <IonRow>
+                    <IonCol>To</IonCol>
+                    <IonCol>
+                        {selectedEventData && <DateTimePickerComponent className="e-field" id="EndTime" data-name="EndTime" min={
+                            new Date(selectedEventData.StartTime)}
+                        />}
+                    </IonCol>
+                </IonRow>
+                <IonList>
+                    {selectedEventForm.map((item, key) => {
+                        return (
+                            <>
+                                {item}
+                            </>
+                        );
+                    })}
+                </IonList>
+                <IonFabButton>
+                    <IonIcon icon={add} onClick={this.addStudentForm.bind(this)} />
+                </IonFabButton>
+            </IonGrid>
+        );
+    }
+
+    private addStudentForm() {
+        const { selectedEventForm } = this.state;
+        if (selectedEventForm.length < 3) {
+            selectedEventForm.push(ADD_STUDENT_FORM);
+            this.setState({ selectedEventForm });
+        }
     }
 }

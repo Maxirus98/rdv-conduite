@@ -30,7 +30,7 @@ export default class LessonContainer extends Component<ILessonProps, ILessonStat
                         return <IonCol className="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event">
                             <IonCard className='fc-event-main'>
                                 <IonCardHeader>
-                                    <IonCardTitle>{lesson.name}</IonCardTitle>
+                                    <IonCardTitle>{lesson.descriptif}</IonCardTitle>
                                 </IonCardHeader>
                             </IonCard>
                         </IonCol>

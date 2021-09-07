@@ -1,5 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import Scheduler from '../components/Scheduler';
+import Calendar from '../components/Calendar';
 import './Tab1.css';
 
 const Tab1: React.FC = () => {
@@ -16,7 +16,7 @@ const Tab1: React.FC = () => {
             <IonTitle size="large">Horaire</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <Scheduler />
+        <Calendar />
       </IonContent>
     </IonPage>
   );
