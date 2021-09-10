@@ -1,41 +1,39 @@
-import { IonCol, IonFabButton, IonGrid, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonRow } from "@ionic/react";
+import { IonButton, IonCol, IonGrid, IonRow, IonSearchbar } from "@ionic/react";
 import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
-import { Agenda, Day, EventClickArgs, Inject, Month, PopupOpenEventArgs, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule';
-import { add } from "ionicons/icons";
+import { Agenda, Day, DragAndDrop, EventClickArgs, Inject, Month, PopupOpenEventArgs, Resize, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule';
 import React from "react";
 import ReactDOM from "react-dom";
-import { IUser } from "../modals/IUser";
 import { Lessons } from "../modals/Lessons";
+import UserService from "../services/UserService";
 
 interface ICalendarState {
     selectedEventData: Record<string, any>
-    selectedEventForm: JSX.Element[];
+    studentsName: string[];
+    searchingStudents: boolean;
 }
 
 interface ICalendarProps {
+    service: UserService;
 }
 
-const ADD_STUDENT_FORM: JSX.Element =
-    <>
-        <IonItem>
-            <IonInput placeholder="Le prénom de l'étudiant"></IonInput>
-        </IonItem>
-        <IonItem>
-            <IonInput placeholder="Le nom de l'étudiant"></IonInput>
-        </IonItem>
-    </>
+
 
 export default class Calendar extends React.Component<ICalendarProps, ICalendarState> {
+    private studentsName: string[];
     constructor(props: ICalendarProps) {
         super(props);
-
         this.state = {
             selectedEventData: null,
-            selectedEventForm: [
-                ADD_STUDENT_FORM
-            ]
+            studentsName: null,
+            searchingStudents: false
         }
+    }
+
+    public async componentDidMount(): Promise<void> {
+        const { studentsName } = this.state
+        var allStudents = await this.getAllStudent();
+        this.setState({ studentsName: allStudents });
     }
 
     public render(): JSX.Element {
@@ -47,6 +45,8 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                         if (args.type == "QuickInfo") {
                             this.replaceQuickInfoTemplate();
                         }
+
+                        document.querySelector(".e-title-text").textContent = "Modifier un cours à l'horaire";
                     }}
                     eventClick={(args: EventClickArgs) => {
                         this.setState({ selectedEventData: args.event });
@@ -57,17 +57,17 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     }}
                     showWeekend={false}
                 >
-                    <Inject services={[Day, Week, Month, Agenda]} />
+                    <Inject services={[Day, Week, Month, Agenda, DragAndDrop, Resize]} />
                 </ScheduleComponent>
             </>
         );
     }
 
     private replaceQuickInfoTemplate(): void {
-        var cellPopup = document.querySelector(".e-cell-popup");
-        var popupEventDetailsButton = document.querySelector(".e-event-details");
+        var cellPopup: ReactDOM.Container = document.querySelector(".e-cell-popup");
+        var popupEventDetailsButton: ReactDOM.Container = document.querySelector(".e-event-details");
         var editor = React.createElement(this.getAppointmentTemplate, this);
-        var popupContent;
+        var popupContent: ReactDOM.Container;
 
         if (cellPopup)
             popupContent = cellPopup.querySelector(".e-popup-content");
@@ -79,23 +79,20 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     private getAppointmentTemplate(): JSX.Element {
         return (
-            <IonGrid>
-                <IonRow>
-                    <IonCol>Module/Sortie</IonCol>
-                    <IonCol className="e-textLabel">
-                        <DropDownListComponent
-                            className="e-field e-input"
-                            data-name="Subject"
-                            dataSource={Object.keys(Lessons)}
-                            placeholder="Module/Sortie"
-                        /></IonCol>
-                </IonRow>
-            </IonGrid>
+            <>
+                <h2 className="e-textLabel">Module/Sortie</h2>
+                <DropDownListComponent
+                    className="e-field e-input"
+                    data-name="Subject"
+                    dataSource={Object.keys(Lessons)}
+                    placeholder="Module/Sortie"
+                />
+            </>
         );
     }
 
-    private getEditorTemplate(): JSX.Element {
-        const { selectedEventData, selectedEventForm } = this.state;
+    private getEditorTemplate() {
+        const { searchingStudents } = this.state;
         return (
             <IonGrid>
                 <IonRow>
@@ -111,39 +108,44 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                 <IonRow>
                     <IonCol className="e-textLabel">From</IonCol>
                     <IonCol>
-                        <DateTimePickerComponent className="e-field" id="StartTime" data-name="StartTime"
+                        <DateTimePickerComponent className="e-field"
+                            id="StartTime"
+                            data-name="StartTime"
                         />
                     </IonCol>
                 </IonRow>
                 <IonRow>
                     <IonCol>To</IonCol>
                     <IonCol>
-                        {selectedEventData && <DateTimePickerComponent className="e-field" id="EndTime" data-name="EndTime" min={
-                            new Date(selectedEventData.StartTime)}
-                        />}
+                        <DateTimePickerComponent
+                            className="e-field" id="EndTime"
+                            data-name="EndTime"
+                            strictMode={true}
+                        />
                     </IonCol>
                 </IonRow>
-                <IonList>
-                    {selectedEventForm.map((item, key) => {
-                        return (
-                            <>
-                                {item}
-                            </>
-                        );
-                    })}
-                </IonList>
-                <IonFabButton>
-                    <IonIcon icon={add} onClick={this.addStudentForm.bind(this)} />
-                </IonFabButton>
+                <IonSearchbar placeholder={"Nom Complet"} onFocus={() => {
+                }} />
+                <IonButton style={{ "display": "block" }} onClick={this.addStudent.bind(this)}>
+                    Ajouter l'élève à la leçon.
+                </IonButton>
             </IonGrid>
         );
     }
 
-    private addStudentForm() {
-        const { selectedEventForm } = this.state;
-        if (selectedEventForm.length < 3) {
-            selectedEventForm.push(ADD_STUDENT_FORM);
-            this.setState({ selectedEventForm });
+    private async getAllStudent(): Promise<string[]> {
+        const { service } = this.props;
+        if (sessionStorage.getItem("students") == null) {
+            var students = await service.getAll();
+            sessionStorage.setItem("students", JSON.stringify(students));
+            students.map((student, key) => {
+                this.studentsName[key] = student.name;
+            })
         }
+        return this.studentsName;
+    }
+
+    private addStudent() {
+        sessionStorage.removeItem("students");
     }
 }

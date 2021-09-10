@@ -1,8 +1,10 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import Calendar from '../components/Calendar';
+import UserService from '../services/UserService';
 import './Tab1.css';
 
 const Tab1: React.FC = () => {
+  const service: UserService = new UserService();
   return (
     <IonPage>
       <IonHeader>
@@ -16,7 +18,7 @@ const Tab1: React.FC = () => {
             <IonTitle size="large">Horaire</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <Calendar />
+        <Calendar service={service} />
       </IonContent>
     </IonPage>
   );
