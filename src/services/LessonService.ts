@@ -1,14 +1,15 @@
+import ILesson from "../modals/ILesson";
 import { IUser } from "../modals/IUser";
 import BaseService, { Routes } from "./BaseService";
 
 const axios = require('axios');
 
-export default class UserService extends BaseService {
-    private readonly RESOURCE: string = "user";
+export default class LessonService extends BaseService {
+    private readonly RESOURCE: string = "lesson";
 
-    public async getAll(): Promise<IUser[]> {
-        var response: IUser[] = await axios.get(`${this.HOST}/${this.RESOURCE}/${Routes.GetAll}`);
-        console.log("function getAllUsers was called");
+    public async getAll(): Promise<ILesson[]> {
+        var response: ILesson[] = await axios.get(`${this.HOST}/${this.RESOURCE}/${Routes.GetAll}`);
+        console.log("function getAllLessons was called at", `${this.HOST}/${this.RESOURCE}/${Routes.GetAll}`);
         return response;
     }
 

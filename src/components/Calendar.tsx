@@ -5,6 +5,7 @@ import { Agenda, Day, DragAndDrop, EventClickArgs, Inject, Month, PopupOpenEvent
 import React from "react";
 import ReactDOM from "react-dom";
 import { Lessons } from "../modals/Lessons";
+import LessonService from "../services/LessonService";
 import UserService from "../services/UserService";
 
 interface ICalendarState {
@@ -14,7 +15,8 @@ interface ICalendarState {
 }
 
 interface ICalendarProps {
-    service: UserService;
+    userService: UserService;
+    lessonService: LessonService;
 }
 
 
@@ -28,12 +30,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
             studentsName: null,
             searchingStudents: false
         }
-    }
-
-    public async componentDidMount(): Promise<void> {
-        const { studentsName } = this.state
-        var allStudents = await this.getAllStudent();
-        this.setState({ studentsName: allStudents });
     }
 
     public render(): JSX.Element {
@@ -61,6 +57,13 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                 </ScheduleComponent>
             </>
         );
+    }
+
+    public async componentDidMount(): Promise<void> {
+        const { studentsName } = this.state
+        var allStudents = await this.getAllStudent();
+        await this.getAllLessons();
+        this.setState({ studentsName: allStudents });
     }
 
     private replaceQuickInfoTemplate(): void {
@@ -133,10 +136,18 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         );
     }
 
+    private async getAllLessons(): Promise<void> {
+        const { lessonService } = this.props;
+        if (sessionStorage.getItem("lessons") == null) {
+            var lessons = await lessonService.getAll();
+            sessionStorage.setItem("lessons", JSON.stringify(lessons));
+        }
+    }
+
     private async getAllStudent(): Promise<string[]> {
-        const { service } = this.props;
+        const { userService } = this.props;
         if (sessionStorage.getItem("students") == null) {
-            var students = await service.getAll();
+            var students = await userService.getAll();
             sessionStorage.setItem("students", JSON.stringify(students));
             students.map((student, key) => {
                 this.studentsName[key] = student.name;

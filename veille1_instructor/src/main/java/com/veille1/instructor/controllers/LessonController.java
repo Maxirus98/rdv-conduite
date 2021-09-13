@@ -11,17 +11,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("lesson")
+@CrossOrigin("http://localhost:3000")
 public class LessonController {
     @Autowired
     LessonService lessonService;
 
     @GetMapping
-    public ResponseEntity<Lesson> getLesson(@RequestParam int id){
+    public ResponseEntity<Lesson> getLesson(@RequestParam int id)  {
         return ResponseEntity.ok(lessonService.getLesson(id));
     }
 
     @PostMapping("/save")
-    public Lesson saveLesson(@RequestBody Lesson lesson){
+    public Lesson saveLesson(@RequestBody Lesson lesson) throws Exception{
+        if(lesson.getId() == 0)
+            throw new Exception("You need to specify an ID different from 0.");
         return lessonService.addLesson(lesson);
     }
 

@@ -1,7 +1,7 @@
 package com.veille1.instructor.services;
 
 import com.veille1.instructor.models.Lesson;
-import com.veille1.instructor.repositories.LessonRepoitory;
+import com.veille1.instructor.repositories.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class LessonService{
 
     @Autowired
-    private LessonRepoitory lessonRepoitory;
+    private LessonRepository lessonRepoitory;
 
     public List<Lesson> getAll(){
         return lessonRepoitory.findAll();
