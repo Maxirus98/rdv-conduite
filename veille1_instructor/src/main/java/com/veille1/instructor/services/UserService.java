@@ -1,6 +1,7 @@
 package com.veille1.instructor.services;
 
 import com.veille1.instructor.models.User;
+import com.veille1.instructor.models.Users;
 import com.veille1.instructor.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

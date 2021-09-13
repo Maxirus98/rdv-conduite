@@ -15,11 +15,6 @@ public class InstructorController {
     @Autowired
     InstructorService instructorService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Instructor>> getAll(){
-        return ResponseEntity.ok(instructorService.getAll());
-    }
-
     @GetMapping
     public Instructor getInstructor(@RequestParam int id) {
         return instructorService.getInstructor(id);

@@ -7,7 +7,7 @@ const axios = require('axios');
 export default class LessonService extends BaseService {
     private readonly RESOURCE: string = "lesson";
 
-    public async getAll(): Promise<ILesson[]> {
+    public async getAllUsers(): Promise<ILesson[]> {
         var response: ILesson[] = await axios.get(`${this.HOST}/${this.RESOURCE}/${Routes.GetAll}`);
         console.log("function getAllLessons was called at", `${this.HOST}/${this.RESOURCE}/${Routes.GetAll}`);
         return response;

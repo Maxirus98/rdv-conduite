@@ -4,10 +4,14 @@ import BaseService, { Routes } from "./BaseService";
 const axios = require('axios');
 
 export default class UserService extends BaseService {
-    private readonly RESOURCE: string = "user";
+    private readonly USER_RESOURCE: string = "user";
+    private readonly INSTRUCTOR_RESOURCE: string = "instructor";
 
-    public async getAll(): Promise<IUser[]> {
-        var response: IUser[] = await axios.get(`${this.HOST}/${this.RESOURCE}/${Routes.GetAll}`);
+
+    // Probleme: GetAllUsers return instructors too
+    // Solution: Trier selon leur type, filtrer selon leur type.
+    public async getAllUsers(): Promise<IUser[]> {
+        var response: IUser[] = await axios.get(`${this.HOST}/${this.USER_RESOURCE}/${Routes.GetAll}`);
         console.log("function getAllUsers was called");
         return response;
     }

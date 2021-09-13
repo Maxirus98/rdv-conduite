@@ -138,8 +138,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     private async getAllLessons(): Promise<void> {
         const { lessonService } = this.props;
+
         if (sessionStorage.getItem("lessons") == null) {
-            var lessons = await lessonService.getAll();
+            var lessons = await lessonService.getAllUsers();
             sessionStorage.setItem("lessons", JSON.stringify(lessons));
         }
     }
@@ -147,7 +148,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     private async getAllStudent(): Promise<string[]> {
         const { userService } = this.props;
         if (sessionStorage.getItem("students") == null) {
-            var students = await userService.getAll();
+            var students = await userService.getAllUsers();
             sessionStorage.setItem("students", JSON.stringify(students));
             students.map((student, key) => {
                 this.studentsName[key] = student.name;
@@ -155,6 +156,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         }
         return this.studentsName;
     }
+
 
     private addStudent() {
         sessionStorage.removeItem("students");

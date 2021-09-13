@@ -18,8 +18,4 @@ public class InstructorService{
     public Instructor getInstructor(int id){
         return instructorRepository.findById(id);
     }
-
-    public List<Instructor> getAll(){
-        return instructorRepository.findAll();
-    }
 }
