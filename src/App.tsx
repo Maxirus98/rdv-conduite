@@ -21,7 +21,7 @@ import '@ionic/react/css/structure.css';
 import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
-import { calendar, listSharp, mail } from 'ionicons/icons';
+import { calendar, mail, people } from 'ionicons/icons';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import Tab1 from './pages/Tab1';
@@ -29,9 +29,6 @@ import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 /* Theme variables */
 import './theme/variables.css';
-
-
-
 
 const App = (): JSX.Element => {
   return (
@@ -42,7 +39,7 @@ const App = (): JSX.Element => {
             <Route exact path="/schedule">
               <Tab1 />
             </Route>
-            <Route exact path="/eventList">
+            <Route exact path="/list">
               <Tab2 />
             </Route>
             <Route path="/tab3">
@@ -57,9 +54,9 @@ const App = (): JSX.Element => {
               <IonIcon icon={calendar} />
               <IonLabel>Horaire</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="eventList" href="/eventList">
-              <IonIcon icon={listSharp} />
-              <IonLabel>Liste des rendez-vous</IonLabel>
+            <IonTabButton tab="list" href="/list">
+              <IonIcon icon={people} />
+              <IonLabel>Instructeurs et élèves</IonLabel>
             </IonTabButton>
             <IonTabButton tab="contact" href="/contact">
               <IonIcon icon={mail} />

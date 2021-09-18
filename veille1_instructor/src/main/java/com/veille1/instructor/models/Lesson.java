@@ -11,8 +11,9 @@ import java.util.Date;
 public class Lesson {
     @Id
     private int id;
-    private String descriptif;
-    private Date date;
+    private String Subject;
+    private Date StartTime;
+    private Date EndTime;
 
     /*private Instructor instructor;
     private User[] students;*/

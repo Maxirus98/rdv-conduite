@@ -11,17 +11,21 @@ import java.util.List;
 public class LessonService{
 
     @Autowired
-    private LessonRepository lessonRepoitory;
+    private LessonRepository lessonRepository;
 
     public List<Lesson> getAll(){
-        return lessonRepoitory.findAll();
+        return lessonRepository.findAll();
     }
 
     public Lesson addLesson(Lesson lesson){
-        return lessonRepoitory.save(lesson);
+        return lessonRepository.save(lesson);
     }
 
     public Lesson getLesson(int id){
-        return lessonRepoitory.findById(id);
+        return lessonRepository.findById(id);
+    }
+
+    public void deleteLesson(int id){
+        lessonRepository.deleteById(id);
     }
 }

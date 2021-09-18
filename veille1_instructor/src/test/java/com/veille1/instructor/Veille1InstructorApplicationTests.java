@@ -10,4 +10,8 @@ class Veille1InstructorApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void contextLoads2() {
+    }
+
 }
