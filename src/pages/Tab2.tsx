@@ -6,25 +6,7 @@ import { Users } from '../modals/Users';
 import UserService from '../services/UserService';
 import './Tab2.css';
 
-const Tab2: React.FC = () => {
-  const userService: UserService = new UserService();
-  const [users, setUsers] = useState([
-    {} as IUser
-  ]);
-
-  useEffect(() => {
-    const getAllUsers = async () => {
-      if (!sessionStorage.getItem("users")) {
-        var allUsers = await userService.getAllUsers();
-        console.log("allUsers", allUsers);
-        setUsers(JSON.parse(JSON.stringify(allUsers)).data);
-      }
-    }
-
-    getAllUsers();
-  }, [])
-
-
+const Tab2 = ({ userService, users }): JSX.Element => {
   return (
     <IonPage>
       <IonHeader>

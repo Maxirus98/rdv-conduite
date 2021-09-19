@@ -22,25 +22,43 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
 import { calendar, mail, people } from 'ionicons/icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import { IUser } from './modals/IUser';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
+import UserService from './services/UserService';
 /* Theme variables */
 import './theme/variables.css';
 
 const App = (): JSX.Element => {
+  const userService: UserService = new UserService();
+  const [users, setUsers] = useState([
+    {} as IUser
+  ]);
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      if (!sessionStorage.getItem("users")) {
+        var allUsers = await userService.getAllUsers();
+        console.log("allUsers", allUsers);
+        setUsers(JSON.parse(JSON.stringify(allUsers)).data);
+      }
+    }
+
+    getAllUsers();
+  }, [])
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/schedule">
-              <Tab1 />
+              <Tab1 userService={userService} users={users} />
             </Route>
             <Route exact path="/list">
-              <Tab2 />
+              <Tab2 userService={userService} users={users} />
             </Route>
             <Route path="/tab3">
               <Tab3 />

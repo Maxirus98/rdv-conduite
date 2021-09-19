@@ -29,7 +29,7 @@ public class LessonController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Lesson> saveLesson(@RequestBody Lesson lesson) throws Exception{
+    public ResponseEntity<Lesson> saveLesson(@RequestBody Lesson lesson){
         if(lesson.getId() == 0)
             return new ResponseEntity("The id can not be 0 or non existant", HttpStatus.BAD_REQUEST);
 

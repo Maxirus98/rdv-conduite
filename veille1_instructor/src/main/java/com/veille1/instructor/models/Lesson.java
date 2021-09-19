@@ -3,6 +3,7 @@ package com.veille1.instructor.models;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Unwrapped;
 
 import java.util.Date;
 
@@ -15,6 +16,7 @@ public class Lesson {
     private Date StartTime;
     private Date EndTime;
 
-    /*private Instructor instructor;
-    private User[] students;*/
+    @Unwrapped(onEmpty = Unwrapped.OnEmpty.USE_NULL)
+    private Instructor instructor;
+    private User[] students;
 }

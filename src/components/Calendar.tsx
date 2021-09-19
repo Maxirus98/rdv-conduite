@@ -7,6 +7,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { IInstructor } from "../modals/IInstructor";
 import ILesson from "../modals/ILesson";
+import { IUser } from "../modals/IUser";
 import { Lessons } from "../modals/Lessons";
 import LessonService from "../services/LessonService";
 import UserService from "../services/UserService";
@@ -19,6 +20,7 @@ interface ICalendarState {
 }
 
 interface ICalendarProps {
+    users: IUser[];
     userService: UserService;
     lessonService: LessonService;
 }
@@ -193,16 +195,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private addStudentToLesson() {
-        /*const { userService } = this.props;
-        sessionStorage.removeItem("students");
-        userService.saveOrUpdateUser({
-            "id": 1,
-            "name": "Max4",
-            "surname": "Dup4",
-            "address": "1234 rue dupuis, h3k 1c83",
-            "phone": "514-962-00274",
-            "email": "dupuismaxime4@hotmail.com"
-        } as IUser);*/
+
     }
 
     private addInstructor() {

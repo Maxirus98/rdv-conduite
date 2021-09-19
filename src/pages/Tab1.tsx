@@ -5,8 +5,7 @@ import LessonService from '../services/LessonService';
 import UserService from '../services/UserService';
 import './Tab1.css';
 
-const Tab1: React.FC = () => {
-  const userService: UserService = new UserService();
+const Tab1 = ({ userService, users }): JSX.Element => {
   const lessonService: LessonService = new LessonService();
   return (
     <IonPage>
@@ -21,7 +20,7 @@ const Tab1: React.FC = () => {
             <IonTitle size="large">Horaire</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <Calendar userService={userService} lessonService={lessonService} />
+        <Calendar userService={userService} lessonService={lessonService} users={users} />
       </IonContent>
     </IonPage>
   );
