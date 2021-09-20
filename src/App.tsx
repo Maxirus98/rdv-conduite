@@ -24,7 +24,7 @@ import '@ionic/react/css/typography.css';
 import { calendar, mail, people } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IUser } from './modals/IUser';
+import { IUser } from './models/IUser';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';

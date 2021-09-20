@@ -16,7 +16,6 @@ public class Lesson {
     private Date StartTime;
     private Date EndTime;
 
-    @Unwrapped(onEmpty = Unwrapped.OnEmpty.USE_NULL)
-    private Instructor instructor;
-    private User[] students;
+    //private Instructor instructor;
+    private User[] users;
 }

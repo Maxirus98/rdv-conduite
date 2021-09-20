@@ -3,8 +3,7 @@ import { Users } from "./Users";
 export interface IUser {
     id: number;
     type: Users;
-    name: string;
-    surname: string;
+    fullName: string;
     address: string;
     phone: string;
     email: string;

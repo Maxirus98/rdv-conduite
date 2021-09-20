@@ -1,5 +1,5 @@
-import { IInstructor } from "../modals/IInstructor";
-import { IUser } from "../modals/IUser";
+import { IInstructor } from "../models/IInstructor";
+import { IUser } from "../models/IUser";
 import BaseService, { Routes } from "./BaseService";
 
 const axios = require('axios');

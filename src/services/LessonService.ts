@@ -1,5 +1,5 @@
-import ILesson from "../modals/ILesson";
-import { IUser } from "../modals/IUser";
+import ILesson from "../models/ILesson";
+import { IUser } from "../models/IUser";
 import BaseService, { Routes } from "./BaseService";
 import axios from "axios";
 
