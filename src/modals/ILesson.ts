@@ -5,4 +5,5 @@ export default interface ILesson {
     subject: Record<string, any>
     startTime: Date;
     endTime: Date;
+    users: number[];
 }

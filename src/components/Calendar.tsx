@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonGrid, IonRow, IonSearchbar } from "@ionic/react";
+import { IonButton, IonCol, IonGrid, IonItem, IonList, IonRow, IonSearchbar } from "@ionic/react";
 import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 import { Agenda, Day, DragAndDrop, EventClickArgs, Inject, Month, PopupCloseEventArgs, PopupOpenEventArgs, Resize, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule';
@@ -17,6 +17,7 @@ interface ICalendarState {
     studentsName: string[];
     searchingStudents: boolean;
     lessons: ILesson[];
+    searchText: string;
 }
 
 interface ICalendarProps {
@@ -34,12 +35,12 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
             studentsName: null,
             searchingStudents: false,
             lessons: [],
+            searchText: "",
         }
     }
 
     public render(): JSX.Element {
         const { lessons } = this.state;
-        console.log("lessons", lessons);
         return (
             <>
                 <ScheduleComponent
@@ -66,7 +67,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                             endTime: { name: 'endTime' }
                         }
                     }}
-
                     startHour="11:00"
                     endHour="21:00"
                     eventClick={(args: EventClickArgs) => {
@@ -85,10 +85,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     public async componentDidMount(): Promise<void> {
-        var allStudents = await this.getAllStudent();
         await this.getAllLessons();
-        this.setState({ studentsName: allStudents });
-
     }
 
     private replaceQuickInfoTemplate(): void {
@@ -120,7 +117,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private getEditorTemplate() {
-        const { searchingStudents } = this.state;
+        const { users } = this.props;
+        const { searchText } = this.state;
+        var searchedUsers: string[] = [];
         return (
             <IonGrid>
                 <IonRow>
@@ -133,28 +132,19 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                             placeholder="Module/Sortie"
                         /></IonCol>
                 </IonRow>
-                <IonRow>
-                    <IonCol className="e-textLabel">From</IonCol>
-                    <IonCol>
-                        <DateTimePickerComponent className="e-field"
-                            id="StartTime"
-                            data-name="StartTime"
-                        />
-                    </IonCol>
-                </IonRow>
-                <IonRow>
-                    <IonCol>To</IonCol>
-                    <IonCol>
-                        <DateTimePickerComponent
-                            className="e-field" id="EndTime"
-                            data-name="EndTime"
-                            strictMode={true}
-                        />
-                    </IonCol>
-                </IonRow>
-                <IonSearchbar placeholder={"Nom Complet"} onFocus={() => {
-                }} />
-                <IonButton style={{ "display": "block" }} onClick={this.addStudentToLesson.bind(this)}>
+                <IonSearchbar value={searchText} onIonChange={(e) => { this.setState({ searchText: e.detail.value! }) }} />
+                {users.map((user) => {
+                    var nameAsArray = user.name ? Array.from(user.name) : null;
+                    if (searchText == null || searchText == "" || nameAsArray.includes(searchText))
+                        searchedUsers = searchedUsers.concat(user.name);
+                })}
+                <DropDownListComponent
+                    className="e-field e-input"
+                    data-name="Users"
+                    dataSource={searchedUsers}
+                    placeholder="Ajouter des participants">
+                </DropDownListComponent>
+                <IonButton style={{ "display": "block" }} onClick={this.addUserToLesson.bind(this)}>
                     Ajouter l'élève à la leçon.
                 </IonButton>
             </IonGrid>
@@ -164,19 +154,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     private async getAllLessons(): Promise<void> {
         var response = await axios.get("http://localhost:8080/lesson/all");
         // Needed to show events on load.
-        setTimeout(async () => this.setState({ lessons: response.data }), 100);
-    }
-
-    private async getAllStudent(): Promise<string[]> {
-        const { userService } = this.props;
-        /*if (sessionStorage.getItem("students") == null) {
-            var students = await userService.getAllUsers();
-            sessionStorage.setItem("students", JSON.stringify(students));
-            students.map((student, key) => {
-                this.studentsName[key] = student.name;
-            })
-        }*/
-        return this.studentsName;
+        setTimeout(async () => this.setState({ lessons: response.data }), 200);
     }
 
     private async addLesson(eventData: any) {
@@ -194,8 +172,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         this.setState({ lessons });
     }
 
-    private addStudentToLesson() {
-
+    private addUserToLesson(lesson: ILesson, userId: number) {
+        lesson.users.concat(userId);
+        axios.post("http://localhost:8080/lesson/save", lesson);
     }
 
     private addInstructor() {
