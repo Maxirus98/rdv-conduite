@@ -4,7 +4,7 @@ import { DropDownListComponent, FilteringEventArgs, MultiSelectComponent, Select
 import { Agenda, Day, DragAndDrop, EventClickArgs, Inject, Month, PopupCloseEventArgs, PopupOpenEventArgs, Resize, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule';
 import { debounce } from "@syncfusion/ej2-base";
 import axios from "axios";
-import { closeOutline, personCircleOutline, save, trash } from "ionicons/icons";
+import { checkmarkCircle, checkmarkOutline, closeOutline, personCircleOutline, save, trash } from "ionicons/icons";
 import React from "react";
 import ReactDOM from "react-dom";
 import ILesson from "../models/ILesson";
@@ -163,13 +163,10 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     </IonList>
                     <div className="e-footer-buttons">
                         <IonButton onClick={this.addUsersToLesson.bind(this)}>
-                            <IonIcon icon={save} />
-                        </IonButton>
-                        <IonButton color="disabled" >
-                            <IonIcon icon={closeOutline} />
+                            <IonIcon icon={checkmarkOutline} />
                         </IonButton>
                         <IonButton color="danger">
-                            <IonIcon icon={trash} />
+                            <IonIcon icon={closeOutline} />
                         </IonButton>
                     </div>
                 </IonGrid>
@@ -193,8 +190,10 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         var itemDataString = JSON.stringify(args.itemData);
         console.log("datastring", itemDataString)
         var user: IUser = JSON.parse(itemDataString).User;
+        var stringUser = JSON.stringify(user);
+        var parsedUser = JSON.parse(stringUser);
         console.log("USER", user);
-        this.setState({ preAddedUsers: [...preAddedUsers, user] })
+        this.setState({ preAddedUsers: [...preAddedUsers, parsedUser] });
     }
 
     private async addLesson(eventData: any) {

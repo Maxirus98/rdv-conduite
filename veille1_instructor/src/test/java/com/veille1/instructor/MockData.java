@@ -1,6 +1,5 @@
 package com.veille1.instructor;
 
-import com.veille1.instructor.models.Instructor;
 import com.veille1.instructor.models.Lesson;
 import com.veille1.instructor.models.User;
 import com.veille1.instructor.models.Users;
@@ -32,31 +31,6 @@ public class MockData {
         return users;
     }
 
-    public static List<Instructor> getAllInstructors() {
-        List<Instructor> instructors = new ArrayList<>();
-        instructors.add(Instructor.instructorBuilder()
-                .id(333)
-                .type(Users.INSTRUCTOR)
-                .fullName("Brigitte Acom")
-                .address("1111 rue Verdun")
-                .phone("514-888-1111")
-                .email("acom.bribri@hotmail.com")
-                .manualDriver(false)
-                .yearsOfExperience(3)
-                .build());
-        instructors.add(Instructor.instructorBuilder()
-                .id(334)
-                .type(Users.INSTRUCTOR)
-                .fullName("Beatrice Acom")
-                .address("4444 rue Dupuis")
-                .phone("514-444-1234")
-                .email("acom.bea@hotmail.com")
-                .manualDriver(true)
-                .yearsOfExperience(4)
-                .build());
-        return instructors;
-    }
-
     public static List<Lesson> getAllLessons() {
         List<Lesson> lessons = new ArrayList<>();
         lessons.add(Lesson.builder()
@@ -64,7 +38,6 @@ public class MockData {
                 .Subject("Module 3")
                 .StartTime(new Date())
                 .EndTime((new Date()))
-                .instructor(getAllInstructors().get(0))
                 .users(getAllUsers())
                 .build()
         );
@@ -73,7 +46,6 @@ public class MockData {
                 .Subject("Module 4")
                 .StartTime(new Date())
                 .EndTime((new Date()))
-                .instructor(getAllInstructors().get(1))
                 .users(getAllUsers())
                 .build()
         );

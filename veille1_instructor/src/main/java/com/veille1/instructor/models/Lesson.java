@@ -22,6 +22,5 @@ public class Lesson {
     private Date StartTime;
     private Date EndTime;
 
-    private Instructor instructor;
     private List<User> users;
 }

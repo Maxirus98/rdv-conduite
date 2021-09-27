@@ -2,7 +2,6 @@ package com.veille1.instructor.service;
 
 import com.veille1.instructor.MockData;
 import com.veille1.instructor.models.Lesson;
-import com.veille1.instructor.models.User;
 import com.veille1.instructor.repositories.LessonRepository;
 import com.veille1.instructor.services.LessonService;
 import org.junit.jupiter.api.Test;

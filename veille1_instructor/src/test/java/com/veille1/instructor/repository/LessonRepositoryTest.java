@@ -1,7 +1,6 @@
 package com.veille1.instructor.repository;
 
 import com.veille1.instructor.MockData;
-import com.veille1.instructor.models.Instructor;
 import com.veille1.instructor.models.Lesson;
 import com.veille1.instructor.models.User;
 import com.veille1.instructor.repositories.LessonRepository;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -35,10 +33,8 @@ public class LessonRepositoryTest {
     @BeforeAll
     void saveLessonTest(){
         List<User> users = MockData.getAllUsers();
-        Instructor instructor = MockData.getAllInstructors().get(0);
-        userRepository.saveAll(users);
 
-        Lesson lesson = new Lesson(333, "Module 3", new Date(), new Date(), instructor, users);
+        Lesson lesson = new Lesson(333, "Module 3", new Date(), new Date(), users);
         lessonRepository.save(lesson);
     }
 
