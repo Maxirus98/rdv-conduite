@@ -13,7 +13,6 @@ import { Lessons } from "../models/Lessons";
 import LessonService from "../services/LessonService";
 import UserService from "../services/UserService";
 import "./Calendar.css";
-import { Users } from "../models/Users";
 
 interface ICalendarState {
     selectedEventData: ILesson;
@@ -99,7 +98,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         await this.getAllLessons();
         // Changes users to an Object[] with FullName key
         users.map((user, key) => {
-            this.userNames.push({ FullName: user.fullName, User: JSON.stringify(user) });
+            this.userNames.push({
+                FullName: user.fullName, User: Object.values(user).toString()
+            });
         })
     }
 
@@ -154,7 +155,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                         {preAddedUsers.map((user, key) => {
                             return <IonItem key={key}>
                                 <IonIcon color="success" icon={personCircleOutline} />
-                                {user}
+                                {user.fullName}
                                 <IonIcon
                                     icon={closeOutline}
                                     color="danger"
@@ -174,6 +175,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
             </>
         );
     }
+
     onFiltering = e => {
         let query = new Query();
         query = (e.text !== "") ? query.where("FullName", "contains", e.text, true) : query;
@@ -188,37 +190,38 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     private addPreAddedUser(args: SelectEventArgs) {
         const { preAddedUsers } = this.state;
         var itemDataString = JSON.stringify(args.itemData);
-        console.log("datastring", itemDataString)
-        var user: IUser = JSON.parse(itemDataString).User;
-        var stringUser = JSON.stringify(user);
-        var parsedUser = JSON.parse(stringUser);
-        console.log("USER", user);
-        this.setState({ preAddedUsers: [...preAddedUsers, parsedUser] });
+
+        var user: string = JSON.parse(itemDataString).User;
+        var properties: string[] = user.split(',');
+        var newUser: IUser = {
+            id: parseInt(properties[0]),
+            fullName: properties[1],
+            address: properties[2],
+            phone: properties[3],
+            email: properties[4],
+        };
+
+        this.setState({ preAddedUsers: [...preAddedUsers, newUser] });
     }
 
     private async addLesson(eventData: any) {
         const { lessons } = this.state;
-        console.log("data", eventData);
-        const { lessonService } = this.props;
+
         var addedLesson: ILesson = await axios.post("http://localhost:8080/lesson/save", {
             id: eventData.id || eventData.Id,
             subject: eventData.Subject || eventData.subject,
             startTime: eventData.startTime || eventData.StartTime,
             endTime: eventData.endTime || eventData.EndTime
         } as ILesson);
-        console.log("addedLesson", addedLesson);
+
         lessons.concat([addedLesson]);
         this.setState({ lessons });
     }
 
     private addUsersToLesson() {
         const { selectedEventData, preAddedUsers } = this.state;
-        // Reinstantiate users which is a custom property
-        selectedEventData.users = [];
-        selectedEventData.users = selectedEventData.users.concat(preAddedUsers);
-        console.log("selectedEventData", selectedEventData);
-        axios.post("http://localhost:8080/lesson/save", selectedEventData).then((res) => {
-            console.log("response", res)
+        selectedEventData.users = preAddedUsers;
+        axios.post("http://localhost:8080/lesson/save", selectedEventData).then(() => {
             this.setState({ selectedEventData: null, preAddedUsers: [] })
         });
     }

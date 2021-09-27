@@ -1,5 +1,6 @@
 package com.veille1.instructor.controllers;
 
+import com.veille1.instructor.dto.LessonDto;
 import com.veille1.instructor.models.Lesson;
 import com.veille1.instructor.services.LessonService;
 import lombok.extern.java.Log;
@@ -27,11 +28,11 @@ public class LessonController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Lesson> saveLesson(@RequestBody Lesson lesson){
-        if(lesson.getId() == 0)
+    public ResponseEntity<Lesson> saveLesson(@RequestBody LessonDto lessonDto){
+        if(lessonDto.getId() == 0)
             return new ResponseEntity("The id can not be 0 or non existant", HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok(lessonService.addLesson(lesson));
+        return ResponseEntity.ok(lessonService.addLesson(LessonDto.dtoToEntity(lessonDto)));
     }
 
     @GetMapping("/all")
