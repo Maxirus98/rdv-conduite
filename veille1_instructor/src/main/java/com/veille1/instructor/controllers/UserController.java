@@ -1,7 +1,6 @@
 package com.veille1.instructor.controllers;
-import com.veille1.instructor.models.Lesson;
+import com.veille1.instructor.dto.UserDto;
 import com.veille1.instructor.models.User;
-import com.veille1.instructor.services.LessonService;
 import com.veille1.instructor.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -23,13 +23,22 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public User saveUser(@RequestBody User user){
-        return userService.saveUser(user);
+    public ResponseEntity<User> saveUser(@RequestBody UserDto userDto){
+        if(userService.getUser(userDto.getEmail()) != null) {
+            return new ResponseEntity("The user already exists", HttpStatus.SEE_OTHER);
+        }
+
+        return ResponseEntity.ok(userService.saveUser(UserDto.dtoToEntity(userDto)));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> getAll(){
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserDto>> getAll(){
+        List<UserDto> userDtoList = userService.getAllUsers().stream().map(u -> {
+            UserDto userDto = UserDto.entityToDto(u);
+            return userDto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(userDtoList);
     }
 
     @DeleteMapping()

@@ -18,9 +18,9 @@ import java.util.List;
 public class Lesson {
     @Id
     private int id;
-    private String Subject;
-    private Date StartTime;
-    private Date EndTime;
+    private String subject;
+    private Date startTime;
+    private Date endTime;
 
     private List<User> users;
 }

@@ -13,12 +13,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("Student")
 public class User {
     @Id
-    protected int id;
-    protected Users type;
-    protected String fullName;
-    protected String address;
-    protected String phone;
-    protected String email;
+    private int id;
+    private Users type;
+    private String fullName;
+    private String address;
+    private String phone;
+    private String email;
 
     @Builder
     public User(int id,

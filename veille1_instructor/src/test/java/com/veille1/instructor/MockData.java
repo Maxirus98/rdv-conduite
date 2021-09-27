@@ -35,17 +35,17 @@ public class MockData {
         List<Lesson> lessons = new ArrayList<>();
         lessons.add(Lesson.builder()
                 .id(333)
-                .Subject("Module 3")
-                .StartTime(new Date())
-                .EndTime((new Date()))
+                .subject("Module 3")
+                .startTime(new Date())
+                .endTime((new Date()))
                 .users(getAllUsers())
                 .build()
         );
         lessons.add(Lesson.builder()
                 .id(334)
-                .Subject("Module 4")
-                .StartTime(new Date())
-                .EndTime((new Date()))
+                .subject("Module 4")
+                .startTime(new Date())
+                .endTime((new Date()))
                 .users(getAllUsers())
                 .build()
         );

@@ -52,7 +52,7 @@ export class UserList extends Component<IUserListProps, IUserListState> {
             "fullName": "Max4",
             "address": "1234 rue dupuis, h3k 1c83",
             "phone": "514-962-00274",
-            "email": "dupuismaxime4@hotmail.com"
+            "email": "dupuismaxime@hotmail.com2"
         } as IUser);
     }
 }
