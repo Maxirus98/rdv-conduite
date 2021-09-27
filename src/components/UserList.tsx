@@ -31,7 +31,7 @@ export class UserList extends Component<IUserListProps, IUserListState> {
                     {users.map((user, key) => {
                         var nameAsArray = user.fullName ? Array.from(user.fullName) : null;
                         console.log("nameAsArray", nameAsArray);
-                        if (nameAsArray != null || searchText == null || searchText == "" || nameAsArray.includes(searchText))
+                        if (nameAsArray && searchText == null || searchText == "" || nameAsArray.includes(searchText))
                             return <IonItem key={key}>{user.fullName}</IonItem>
                     })}
                 </IonList>

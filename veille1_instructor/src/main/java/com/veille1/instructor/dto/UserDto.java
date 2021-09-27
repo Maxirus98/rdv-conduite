@@ -6,4 +6,6 @@ import java.io.Serializable;
 
 @Data
 public class UserDto implements Serializable {
+    protected int id;
+    protected String fullName;
 }

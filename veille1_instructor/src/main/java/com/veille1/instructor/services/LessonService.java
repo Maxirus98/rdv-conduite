@@ -13,7 +13,7 @@ public class LessonService{
     @Autowired
     private LessonRepository lessonRepository;
 
-    public List<Lesson> getAll(){
+    public List<Lesson> getAllLessons(){
         return lessonRepository.findAll();
     }
 

@@ -9,16 +9,29 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Document("Student")
 public class User {
     @Id
-    private int id;
-    private Users type;
-    private String fullName;
-    private String address;
-    private String phone;
-    private String email;
+    protected int id;
+    protected Users type;
+    protected String fullName;
+    protected String address;
+    protected String phone;
+    protected String email;
+
+    @Builder
+    public User(int id,
+                      Users type,
+                      String fullName,
+                      String address,
+                      String phone,
+                      String email){
+        this.id = id;
+        this.type = type;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+    }
 }

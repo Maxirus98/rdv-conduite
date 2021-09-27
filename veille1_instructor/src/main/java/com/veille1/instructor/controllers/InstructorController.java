@@ -24,4 +24,9 @@ public class InstructorController {
     public Instructor saveInstructor(@RequestBody Instructor instructor) {
         return instructorService.saveInstructor(instructor);
     }
+
+    @GetMapping("/all")
+    public List<Instructor> getAllInstructors(){
+        return instructorService.getAllInstructors();
+    }
 }

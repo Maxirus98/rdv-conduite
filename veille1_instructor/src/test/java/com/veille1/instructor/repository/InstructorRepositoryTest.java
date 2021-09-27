@@ -1,8 +1,8 @@
 package com.veille1.instructor.repository;
 
 import com.veille1.instructor.MockData;
-import com.veille1.instructor.models.User;
-import com.veille1.instructor.repositories.UserRepository;
+import com.veille1.instructor.models.Instructor;
+import com.veille1.instructor.repositories.InstructorRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,20 +15,18 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 @DataMongoTest
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class UserRepositoryTest {
+public class InstructorRepositoryTest {
 
     @Autowired
-    UserRepository userRepository;
+    InstructorRepository instructorRepository;
 
     @BeforeAll
-    void saveUser(){
-        List<User> users = MockData.getAllUsers();
-        userRepository.saveAll(users);
+    void saveInstructor(){
+        List<Instructor> instructors = MockData.getAllInstructors();
+        instructorRepository.saveAll(instructors);
     }
 
     @Test
@@ -37,9 +35,9 @@ public class UserRepositoryTest {
         Integer id = 333;
 
         // Act
-        Optional<User> user = userRepository.findById(id);
+        Optional<Instructor> instructor = instructorRepository.findById(id);
 
         // Assert
-        assertEquals(id, user.get().getId());
+        assertEquals(id, instructor.get().getId());
     }
 }

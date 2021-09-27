@@ -15,7 +15,16 @@ public class InstructorService{
     public Instructor saveInstructor(Instructor instructor){
         return instructorRepository.save(instructor);
     }
+
+    public List<Instructor> getAllInstructors() {
+        return instructorRepository.findAll();
+    }
+
     public Instructor getInstructor(int id){
         return instructorRepository.findById(id);
+    }
+
+    public void deleteInstructor(int id) {
+        instructorRepository.deleteById(id);
     }
 }

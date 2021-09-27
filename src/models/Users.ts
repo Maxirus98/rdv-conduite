@@ -1,4 +1,4 @@
 export enum Users {
-    "Instructor" = 0,
-    "Student" = 1
+    Instructor = 0,
+    Student = 1
 }

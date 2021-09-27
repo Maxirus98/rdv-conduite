@@ -3,8 +3,6 @@ package com.veille1.instructor.controllers;
 import com.veille1.instructor.models.Lesson;
 import com.veille1.instructor.services.LessonService;
 import lombok.extern.java.Log;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +18,12 @@ public class LessonController {
     LessonService lessonService;
 
     @GetMapping
-    public ResponseEntity<Lesson> getLesson(@RequestParam int id)  {
+    public Lesson getLesson(@RequestParam int id)  {
         Lesson lesson = lessonService.getLesson(id);
-        if(lesson == null)
-            return new ResponseEntity("Lesson with id " + id + " does not exist.", HttpStatus.NOT_FOUND);
+        /*if(lesson == null)
+            return new ResponseEntity("Lesson with id " + id + " does not exist.", HttpStatus.NOT_FOUND);*/
 
-        return ResponseEntity.ok(lesson);
+        return lesson;
     }
 
     @PostMapping("/save")
@@ -38,11 +36,11 @@ public class LessonController {
 
     @GetMapping("/all")
     public List<Lesson> getAll(){
-        log.info(lessonService.getAll().toString());
-        return lessonService.getAll();
+        log.info(lessonService.getAllLessons().toString());
+        return lessonService.getAllLessons();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping()
     public ResponseEntity<Lesson> deleteLesson(@RequestParam int id){
         Lesson lesson = lessonService.getLesson(id);
         if(lesson == null) {
