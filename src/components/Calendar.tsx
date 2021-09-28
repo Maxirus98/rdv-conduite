@@ -30,18 +30,21 @@ interface ICalendarProps {
 
 export default class Calendar extends React.Component<ICalendarProps, ICalendarState> {
     private userNames = [];
+    private lessonInit = {
+        id: null,
+        subject: null,
+        startTime: null,
+        endTime: null,
+        users: []
+    };
+
+
     constructor(props: ICalendarProps) {
         super(props);
         this.state = {
-            selectedEventData: {
-                id: null,
-                subject: null,
-                startTime: null,
-                endTime: null,
-                users: []
-            },
+            selectedEventData: this.lessonInit,
             searchingStudents: false,
-            lessons: [],
+            lessons: [this.lessonInit],
             searchText: "",
             preAddedUsers: [],
         }
@@ -56,7 +59,8 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                         if (args.type == "QuickInfo") {
                             this.replaceQuickInfoTemplate();
                         }
-
+                        if (args.type == "DeleteAlert")
+                            console.log("args", args);
                         document.querySelector(".e-title-text").textContent = "Modifier la liste des participants";
                     }}
                     views={['Day', 'Week', 'Month', 'Agenda']}
@@ -64,6 +68,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                         if (args.type == "QuickInfo") {
                             console.log("addInfo", args);
                             this.addLesson(args.data);
+                        }
+                        if (args.type == "Editor") {
+                            this.setState({ selectedEventData: this.lessonInit, preAddedUsers: [] });
                         }
                     }}
                     eventSettings={{
@@ -84,6 +91,8 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     cellDoubleClick={(args: PopupOpenEventArgs) => {
                         args.cancel = true;
                     }}
+                    resizeStop={(args) => this.addLesson(args.data)}
+                    dragStop={(args) => this.addLesson(args.data)}
                     firstDayOfWeek={1}
                     showWeekend={false}
                 >
@@ -98,6 +107,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         await this.getAllLessons();
         // Changes users to an Object[] with FullName key
         users.map((user, key) => {
+            console.log("user to string", Object.values(user).toString());
             this.userNames.push({
                 FullName: user.fullName, User: Object.values(user).toString()
             });
@@ -133,7 +143,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private getEditorTemplate() {
-        const { preAddedUsers } = this.state;
+        const { preAddedUsers, lessons } = this.state;
         return (
             <>
                 <IonGrid>
@@ -152,6 +162,11 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     <IonTitle size="small" style={{ marginTop: "1em", textAlign: "center" }}>Participants: </IonTitle>
                     <IonItemDivider />
                     <IonList>
+                        {lessons.length > 0 && lessons.map((lesson) => {
+                        })}
+                    </IonList>
+                    <IonItemDivider />
+                    <IonList>
                         {preAddedUsers.map((user, key) => {
                             return <IonItem key={key}>
                                 <IonIcon color="success" icon={personCircleOutline} />
@@ -159,14 +174,15 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                                 <IonIcon
                                     icon={closeOutline}
                                     color="danger"
-                                    onClick={() => console.log("deleted user")} /></IonItem>
+                                    onClick={this.deletePreAddedUser.bind(this, key)} />
+                            </IonItem>
                         })}
                     </IonList>
                     <div className="e-footer-buttons">
                         <IonButton onClick={this.addUsersToLesson.bind(this)}>
                             <IonIcon icon={checkmarkOutline} />
                         </IonButton>
-                        <IonButton color="danger">
+                        <IonButton color="danger" onClick={this.deleteLesson.bind(this, this.state.selectedEventData.id)}>
                             <IonIcon icon={closeOutline} />
                         </IonButton>
                     </div>
@@ -184,14 +200,17 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     private async getAllLessons(): Promise<void> {
         var response = await axios.get("http://localhost:8080/lesson/all");
+        console.log("getAllLessons", response);
         setTimeout(async () => this.setState({ lessons: response.data }), 200);
     }
 
     private addPreAddedUser(args: SelectEventArgs) {
         const { preAddedUsers } = this.state;
-        var itemDataString = JSON.stringify(args.itemData);
 
+        // Change itemData to a new object with the right properties (FullName and User)
+        var itemDataString = JSON.stringify(args.itemData);
         var user: string = JSON.parse(itemDataString).User;
+
         var properties: string[] = user.split(',');
         var newUser: IUser = {
             id: parseInt(properties[0]),
@@ -204,7 +223,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         this.setState({ preAddedUsers: [...preAddedUsers, newUser] });
     }
 
-    private async addLesson(eventData: any) {
+    private async addLesson(eventData: any): Promise<void> {
         const { lessons } = this.state;
 
         var addedLesson: ILesson = await axios.post("http://localhost:8080/lesson/save", {
@@ -218,15 +237,22 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         this.setState({ lessons });
     }
 
-    private addUsersToLesson() {
+    private async addUsersToLesson(): Promise<void> {
         const { selectedEventData, preAddedUsers } = this.state;
         selectedEventData.users = preAddedUsers;
-        axios.post("http://localhost:8080/lesson/save", selectedEventData).then(() => {
-            this.setState({ selectedEventData: null, preAddedUsers: [] })
-        });
+
+        await axios.post("http://localhost:8080/lesson/save", selectedEventData);
+        window.location.reload();
     }
 
-    private deleteUserFromLesson() {
+    private deletePreAddedUser(index: number) {
+        const { preAddedUsers } = this.state;
+        preAddedUsers.splice(index, 1);
+        this.setState({ preAddedUsers });
+    }
 
+    private async deleteLesson(id: number): Promise<void> {
+        await axios.delete(`http://localhost:8080/lesson?id=${id}`);
+        window.location.reload();
     }
 }

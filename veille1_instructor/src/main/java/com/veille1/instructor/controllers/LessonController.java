@@ -36,7 +36,7 @@ public class LessonController {
     }
 
     @GetMapping("/all")
-    public List<Lesson> getAll(){
+        public List<Lesson> getAll(){
         log.info(lessonService.getAllLessons().toString());
         return lessonService.getAllLessons();
     }

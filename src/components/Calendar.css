@@ -1,9 +1,9 @@
-.e-schedule-dialog .e-event-cancel, .e-event-save, .e-event-delete{ 
+.e-schedule-dialog .e-footer-content { 
     display: none; 
 } 
 
 .e-footer-buttons{
-    position:relative;
+    position:absolute;
     bottom: 0;
     right:0;
     text-align: right;
