@@ -14,7 +14,7 @@ public class MockData {
         List<User> users = new ArrayList<>();
         users.add(User.builder()
                 .id(333)
-                .type(Users.STUDENT)
+                .isStudent(false)
                 .fullName("Brigitte Acom")
                 .address("1111 rue Verdun")
                 .phone("514-888-1111")
@@ -22,7 +22,7 @@ public class MockData {
                 .build());
         users.add(User.builder()
                 .id(334)
-                .type(Users.STUDENT)
+                .isStudent(true)
                 .fullName("student student")
                 .address("1111 rue student")
                 .phone("514-888-2221")

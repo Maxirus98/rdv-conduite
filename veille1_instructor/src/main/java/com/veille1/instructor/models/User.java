@@ -10,11 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @NoArgsConstructor
-@Document("Student")
+@Document("users")
 public class User {
     @Id
     private int id;
-    private Users type;
+    private boolean isStudent;
     private String fullName;
     private String address;
     private String phone;
@@ -22,13 +22,13 @@ public class User {
 
     @Builder
     public User(int id,
-                      Users type,
+                      boolean isStudent,
                       String fullName,
                       String address,
                       String phone,
                       String email){
         this.id = id;
-        this.type = type;
+        this.isStudent = isStudent;
         this.fullName = fullName;
         this.address = address;
         this.phone = phone;

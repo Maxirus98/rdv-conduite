@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class UserDto implements Serializable {
 
     private int id;
+    private boolean isStudent;
     private String fullName;
     private String address;
     private String phone;
@@ -23,6 +24,7 @@ public class UserDto implements Serializable {
 
     public static UserDto entityToDto(User user) {
         return UserDto.builder().id(user.getId())
+                .isStudent(user.isStudent())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .address(user.getAddress())
@@ -32,6 +34,7 @@ public class UserDto implements Serializable {
 
     public static User dtoToEntity(UserDto userDto){
         return User.builder().id(userDto.getId())
+                .isStudent(userDto.isStudent())
                 .fullName(userDto.getFullName())
                 .email(userDto.getEmail())
                 .address(userDto.getAddress())

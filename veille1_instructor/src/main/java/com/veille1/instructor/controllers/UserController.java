@@ -42,13 +42,13 @@ public class UserController {
     }
 
     @DeleteMapping()
-    public ResponseEntity deleteUser(@RequestParam Integer id){
+    public ResponseEntity<String> deleteUser(@RequestParam Integer id){
         User user = userService.getUser(id);
         if(user == null) {
             return new ResponseEntity("User with id " + id  + " does not exist.", HttpStatus.NOT_FOUND);
         }
 
         userService.deleteUser(id);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok("User with id " + id  + " was deleted.");
     }
 }

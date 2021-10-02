@@ -1,5 +1,5 @@
 import { IonFab, IonFabButton, IonIcon, IonItem, IonList, IonSearchbar } from '@ionic/react';
-import { personAdd } from 'ionicons/icons';
+import { person, personAdd } from 'ionicons/icons';
 import React, { Component } from 'react';
 import { ISharedProps } from './ISharedProps';
 import { IUser } from '../models/IUser';
@@ -28,32 +28,16 @@ export class UserList extends Component<IUserListProps, IUserListState> {
             <>
                 <IonSearchbar value={searchText} onIonChange={(e) => { this.setState({ searchText: e.detail.value! }) }} />
                 <IonList>
-                    {users.map((user, key) => {
+                    {users.sort((userA, userB) => {
+                        return (userA.student === userB.student) ? 0 : userA.student ? 1 : -1;
+                    }).map((user, key) => {
                         var nameAsArray = user.fullName ? Array.from(user.fullName) : null;
-                        console.log("nameAsArray", nameAsArray);
                         if (nameAsArray && searchText == null || searchText == "" || nameAsArray.includes(searchText))
-                            return <IonItem key={key}>{user.fullName}</IonItem>
+                            return <IonItem key={key}><IonIcon icon={person} color={user.student ? "success" : "secondary"} /> {user.fullName}</IonItem>
                     })}
                 </IonList>
-                <IonFab vertical="bottom" horizontal="end" slot="fixed" onClick={this.addStudentToDB.bind(this)}>
-                    <IonFabButton>
-                        <IonIcon icon={personAdd} />
-                    </IonFabButton>
-                </IonFab>
             </>
         )
-    }
-
-    private addStudentToDB() {
-        const { userService } = this.props;
-        sessionStorage.removeItem("students");
-        userService.saveOrUpdateUser({
-            "id": 1,
-            "fullName": "Max4",
-            "address": "1234 rue dupuis, h3k 1c83",
-            "phone": "514-962-00274",
-            "email": "dupuismaxime@hotmail.com2"
-        } as IUser);
     }
 }
 

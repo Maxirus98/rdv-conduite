@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataMongoTest
 @ExtendWith(SpringExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS) //POUR BYPASS LE STATIC
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LessonRepositoryTest {
 
     @Autowired

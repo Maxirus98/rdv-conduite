@@ -10,7 +10,7 @@ export default class UserService extends BaseService {
 
     public async getAllUsers(): Promise<IUser[]> {
         var response: IUser[] = await axios.get(`${this.HOST}/${this.USER_RESOURCE}/${Routes.GetAll}`);
-        console.log("function getAllUsers was called");
+        console.log("function getAllUsers was called", response);
         return response;
     }
 

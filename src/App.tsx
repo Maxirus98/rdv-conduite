@@ -35,7 +35,14 @@ import './theme/variables.css';
 const App = (): JSX.Element => {
   const userService: UserService = new UserService();
   const [users, setUsers] = useState([
-    {} as IUser
+    {
+      id: null,
+      student: null,
+      fullName: "",
+      address: "",
+      phone: "",
+      email: "",
+    } as IUser
   ]);
 
   useEffect(() => {

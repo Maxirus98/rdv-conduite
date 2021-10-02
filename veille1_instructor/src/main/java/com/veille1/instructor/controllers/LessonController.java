@@ -19,12 +19,12 @@ public class LessonController {
     LessonService lessonService;
 
     @GetMapping
-    public Lesson getLesson(@RequestParam int id)  {
+    public ResponseEntity<Lesson> getLesson(@RequestParam int id)  {
         Lesson lesson = lessonService.getLesson(id);
-        /*if(lesson == null)
-            return new ResponseEntity("Lesson with id " + id + " does not exist.", HttpStatus.NOT_FOUND);*/
+        if(lesson == null)
+            return new ResponseEntity("Lesson with id " + id + " does not exist.", HttpStatus.NOT_FOUND);
 
-        return lesson;
+        return ResponseEntity.ok(lesson);
     }
 
     @PostMapping("/save")
@@ -36,20 +36,19 @@ public class LessonController {
     }
 
     @GetMapping("/all")
-        public List<Lesson> getAll(){
-        log.info(lessonService.getAllLessons().toString());
-        return lessonService.getAllLessons();
+        public ResponseEntity<List<Lesson>> getAll(){
+        return ResponseEntity.ok(lessonService.getAllLessons());
     }
 
     @DeleteMapping()
-    public ResponseEntity<Lesson> deleteLesson(@RequestParam int id){
+    public ResponseEntity<String> deleteLesson(@RequestParam int id){
         Lesson lesson = lessonService.getLesson(id);
         if(lesson == null) {
             return new ResponseEntity("Lesson with id " + id  + " does not exist.", HttpStatus.NOT_FOUND);
         }
         
         lessonService.deleteLesson(id);
-        return ResponseEntity.ok(lesson);
+        return ResponseEntity.ok("Lesson with id " + id + " was deleted.");
     }
 
 }

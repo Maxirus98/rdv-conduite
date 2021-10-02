@@ -1,3 +1,4 @@
+@import url("../theme/variables.css");
 .e-schedule-dialog .e-footer-content { 
     display: none; 
 } 
@@ -7,4 +8,12 @@
     bottom: 0;
     right:0;
     text-align: right;
+}
+
+.e-appointment-details{
+    background-color:var(--ion-color-primary);
+}
+
+.dropDown{
+    background-color: greenyellow;
 }
