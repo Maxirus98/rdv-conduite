@@ -21,7 +21,7 @@ import '@ionic/react/css/structure.css';
 import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
-import { calendar, mail, people } from 'ionicons/icons';
+import { calendar, mail, people, school } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IUser } from './models/IUser';
@@ -65,7 +65,7 @@ const App = (): JSX.Element => {
             <Route exact path="/list">
               <Tab2 userService={userService} users={users} />
             </Route>
-            <Route path="/tab3">
+            <Route path="/apply">
               <Tab3 />
             </Route>
             <Route exact path="/">
@@ -81,9 +81,9 @@ const App = (): JSX.Element => {
               <IonIcon icon={people} />
               <IonLabel>Instructeurs et élèves</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="contact" href="/contact">
-              <IonIcon icon={mail} />
-              <IonLabel>Contact</IonLabel>
+            <IonTabButton tab="apply" href="/apply">
+              <IonIcon icon={school} />
+              <IonLabel>Appliquer pour une leçon</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>

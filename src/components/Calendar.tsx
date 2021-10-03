@@ -1,10 +1,9 @@
-import { IonButton, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonItem, IonItemDivider, IonList, IonTitle } from "@ionic/react";
+import { IonButton, IonGrid, IonIcon, IonItem, IonList, IonTitle } from "@ionic/react";
 import { Query } from '@syncfusion/ej2-data';
-import { DropDownListComponent, FilteringEventArgs, ItemCreatedArgs, MultiSelectComponent, SelectEventArgs } from '@syncfusion/ej2-react-dropdowns';
+import { DropDownListComponent, SelectEventArgs } from '@syncfusion/ej2-react-dropdowns';
 import { Agenda, Day, DragAndDrop, EventClickArgs, Inject, Month, PopupCloseEventArgs, PopupOpenEventArgs, Resize, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule';
-import { debounce } from "@syncfusion/ej2-base";
 import axios from "axios";
-import { checkmarkCircle, checkmarkOutline, closeOutline, personCircleOutline, save, trash } from "ionicons/icons";
+import { checkmarkOutline, closeOutline, personCircleOutline } from "ionicons/icons";
 import React from "react";
 import ReactDOM from "react-dom";
 import ILesson from "../models/ILesson";
@@ -55,14 +54,11 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                         if (args.type == "QuickInfo") {
                             this.replaceQuickInfoTemplate();
                         }
-                        if (args.type == "DeleteAlert")
-                            console.log("args", args);
                         document.querySelector(".e-title-text").textContent = "Modifier la liste des participants";
                     }}
                     views={['Day', 'Week', 'Month', 'Agenda']}
                     popupClose={(args: PopupCloseEventArgs) => {
                         if (args.type == "QuickInfo") {
-                            console.log("addInfo", args);
                             this.addLesson(args.data);
                         }
                         if (args.type == "Editor") {
@@ -78,10 +74,10 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                             endTime: { name: 'endTime' }
                         }
                     }}
-                    startHour="11:00"
+                    startHour="10:00"
                     endHour="21:00"
                     eventClick={(args: EventClickArgs) => {
-                        this.setState({ selectedEventData: args.event as ILesson }, () => console.log("eventData", this.state.selectedEventData));
+                        this.setState({ selectedEventData: args.event as ILesson });
                     }}
                     editorTemplate={this.getEditorTemplate.bind(this)}
                     cellDoubleClick={(args: PopupOpenEventArgs) => {
@@ -89,8 +85,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     }}
                     resizeStop={(args) => this.addLesson(args.data)}
                     dragStop={(args) => this.addLesson(args.data)}
-                    firstDayOfWeek={1}
-                    showWeekend={false}
+                    showWeekend={true}
                 >
                     <Inject services={[Day, Week, Month, Agenda, DragAndDrop, Resize]} />
                 </ScheduleComponent>
@@ -103,7 +98,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         await this.getAllLessons();
         // Changes users to an Object[] with FullName key
         users.map((user, key) => {
-            console.log("user to string", Object.values(user).toString());
             this.userNames.push({
                 FullName: user.fullName, User: Object.values(user).toString()
             });
@@ -154,7 +148,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
             <>
                 <IonGrid>
                     <DropDownListComponent
-                        cssClass="dropDown"
                         className="e-field e-input"
                         data-name="Users"
                         dataSource={this.userNames}
@@ -195,7 +188,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     private async getAllLessons(): Promise<void> {
         var response = await axios.get("http://192.168.56.1:8080/lesson/all");
-        console.log("getAllLessons", response);
         setTimeout(async () => this.setState({ lessons: response.data }), 200);
     }
 

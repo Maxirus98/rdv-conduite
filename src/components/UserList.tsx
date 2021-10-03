@@ -1,8 +1,8 @@
-import { IonFab, IonFabButton, IonIcon, IonItem, IonList, IonSearchbar } from '@ionic/react';
-import { person, personAdd } from 'ionicons/icons';
+import { IonIcon, IonItem, IonList, IonSearchbar } from '@ionic/react';
+import { person } from 'ionicons/icons';
 import React, { Component } from 'react';
-import { ISharedProps } from './ISharedProps';
 import { IUser } from '../models/IUser';
+import { ISharedProps } from './ISharedProps';
 
 interface IUserListProps extends ISharedProps {
     users: IUser[];
@@ -28,7 +28,7 @@ export class UserList extends Component<IUserListProps, IUserListState> {
             <>
                 <IonSearchbar value={searchText} onIonChange={(e) => { this.setState({ searchText: e.detail.value! }) }} />
                 <IonList>
-                    {users.sort((userA, userB) => {
+                    {users.length > 0 && users.sort((userA, userB) => {
                         return (userA.student === userB.student) ? 0 : userA.student ? 1 : -1;
                     }).map((user, key) => {
                         var nameAsArray = user.fullName ? Array.from(user.fullName) : null;
