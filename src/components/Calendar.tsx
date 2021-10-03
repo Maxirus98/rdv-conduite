@@ -100,7 +100,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     public async componentDidMount(): Promise<void> {
         const { users } = this.props;
-        var allLessons = await this.getAllLessons();
+        await this.getAllLessons();
         // Changes users to an Object[] with FullName key
         users.map((user, key) => {
             console.log("user to string", Object.values(user).toString());
@@ -108,8 +108,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                 FullName: user.fullName, User: Object.values(user).toString()
             });
         })
-
-        this.setState({})
     }
 
     private replaceQuickInfoTemplate(): void {
@@ -142,9 +140,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     private getEditorTemplate() {
         const { selectedEventData } = this.state;
-        const getParticipants = (key, user): JSX.Element => {
+        const getParticipants = (key: React.Key, user: IUser): JSX.Element => {
             return <IonItem key={key}>
-                <IonIcon color="success" icon={personCircleOutline} />
+                <IonIcon color={user.student ? "success" : "secondary"} icon={personCircleOutline} />
                 {user.fullName}
                 <IonIcon
                     icon={closeOutline}
@@ -196,7 +194,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     };
 
     private async getAllLessons(): Promise<void> {
-        var response = await axios.get("http://localhost:8080/lesson/all");
+        var response = await axios.get("http://192.168.56.1:8080/lesson/all");
         console.log("getAllLessons", response);
         setTimeout(async () => this.setState({ lessons: response.data }), 200);
     }
@@ -204,18 +202,18 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     private addUserToSelectedEventData(args: SelectEventArgs) {
         const { selectedEventData } = this.state;
 
-        // Change itemData to a new object with the right properties (FullName and User)
         var itemDataString = JSON.stringify(args.itemData);
         var user: string = JSON.parse(itemDataString).User;
 
         var properties: string[] = user.split(',');
+
         var newUser: IUser = {
             id: parseInt(properties[0]),
-            student: properties[1] === "true",
-            fullName: properties[2],
-            address: properties[3],
-            phone: properties[4],
-            email: properties[5],
+            fullName: properties[1],
+            address: properties[2],
+            phone: properties[3],
+            email: properties[4],
+            student: properties[5] === "true"
         };
 
         if (!selectedEventData.users)
@@ -226,7 +224,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     private async addLesson(eventData: any): Promise<void> {
         const { lessons } = this.state;
 
-        var addedLesson: ILesson = await axios.post("http://localhost:8080/lesson/save", {
+        var addedLesson: ILesson = await axios.post("http://192.168.56.1:8080/lesson/save", {
             id: eventData.id || eventData.Id,
             subject: eventData.Subject || eventData.subject,
             startTime: eventData.startTime || eventData.StartTime,
@@ -240,7 +238,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     private async addUsersToLesson(): Promise<void> {
         const { selectedEventData } = this.state;
-        await axios.post("http://localhost:8080/lesson/save", selectedEventData);
+        await axios.post("http://192.168.56.1:8080/lesson/save", selectedEventData);
         window.location.reload();
     }
 
@@ -251,7 +249,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private async deleteLesson(id: number): Promise<void> {
-        await axios.delete(`http://localhost:8080/lesson?id=${id}`);
+        await axios.delete(`http://192.168.56.1:8080/lesson?id=${id}`);
         window.location.reload();
     }
 }

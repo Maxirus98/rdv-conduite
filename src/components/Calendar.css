@@ -10,10 +10,18 @@
     text-align: right;
 }
 
-.e-appointment-details{
+.e-schedule .e-vertical-view .e-day-wrapper .e-appointment, .e-schedule .e-month-view .e-appointment {
     background-color:var(--ion-color-primary);
+
 }
 
-.dropDown{
-    background-color: greenyellow;
+.e-schedule .e-agenda-view .e-appointment {
+    border-left: 3px solid var(--ion-color-primary);
+    border-right: 0;
+    cursor: default;
+    padding: 0 8px;
+}
+
+.e-quick-popup-wrapper .e-event-popup .e-popup-header {
+    background-color:var(--ion-color-primary);
 }

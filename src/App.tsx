@@ -47,11 +47,9 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     const getAllUsers = async () => {
-      if (!sessionStorage.getItem("users")) {
-        var allUsers = await userService.getAllUsers();
-        console.log("allUsers", allUsers);
-        setUsers(JSON.parse(JSON.stringify(allUsers)).data);
-      }
+      var allUsers = await userService.getAllUsers();
+      console.log("allUsers", allUsers);
+      setUsers(JSON.parse(JSON.stringify(allUsers)).data);
     }
 
     getAllUsers();

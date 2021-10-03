@@ -32,7 +32,7 @@ export class UserList extends Component<IUserListProps, IUserListState> {
                         return (userA.student === userB.student) ? 0 : userA.student ? 1 : -1;
                     }).map((user, key) => {
                         var nameAsArray = user.fullName ? Array.from(user.fullName) : null;
-                        if (nameAsArray && searchText == null || searchText == "" || nameAsArray.includes(searchText))
+                        if (nameAsArray != null && searchText == null || searchText == "" || nameAsArray.includes(searchText))
                             return <IonItem key={key}><IonIcon icon={person} color={user.student ? "success" : "secondary"} /> {user.fullName}</IonItem>
                     })}
                 </IonList>

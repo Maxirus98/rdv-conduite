@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("lesson")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin()
 @Log
 public class LessonController {
     @Autowired
