@@ -5,7 +5,7 @@ import LessonService from '../services/LessonService';
 import UserService from '../services/UserService';
 import './Tab1.css';
 
-const Tab1 = ({ userService, users }): JSX.Element => {
+const Tab1 = ({ userService, users, lessons }): JSX.Element => {
   const lessonService: LessonService = new LessonService();
   return (
     <IonPage>
@@ -20,7 +20,7 @@ const Tab1 = ({ userService, users }): JSX.Element => {
             <IonTitle size="large">Horaire</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <Calendar userService={userService} lessonService={lessonService} users={users} />
+        <Calendar userService={userService} lessonService={lessonService} users={users} allLessons={lessons} />
       </IonContent>
     </IonPage>
   );

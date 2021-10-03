@@ -6,7 +6,7 @@ import { Users } from '../models/Users';
 import UserService from '../services/UserService';
 import './Tab2.css';
 
-const Tab2 = ({ userService, users }): JSX.Element => {
+const Tab2 = ({ userService, users, lessons }): JSX.Element => {
   return (
     <IonPage>
       <IonHeader>

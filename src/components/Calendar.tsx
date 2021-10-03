@@ -21,6 +21,7 @@ interface ICalendarState {
 
 interface ICalendarProps {
     users: IUser[];
+    allLessons: ILesson[];
     userService: UserService;
     lessonService: LessonService;
 }
@@ -46,6 +47,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     public render(): JSX.Element {
+        const { users, allLessons } = this.props;
         const { lessons } = this.state;
         return (
             <>
@@ -66,7 +68,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                         }
                     }}
                     eventSettings={{
-                        dataSource: lessons,
+                        dataSource: allLessons,
                         fields: {
                             id: 'id',
                             subject: { name: 'subject' },
@@ -85,6 +87,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     }}
                     resizeStop={(args) => this.addLesson(args.data)}
                     dragStop={(args) => this.addLesson(args.data)}
+                    firstDayOfWeek={1}
                     showWeekend={true}
                 >
                     <Inject services={[Day, Week, Month, Agenda, DragAndDrop, Resize]} />
@@ -94,8 +97,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     public async componentDidMount(): Promise<void> {
-        const { users } = this.props;
-        await this.getAllLessons();
+        const { users, allLessons } = this.props;
         // Changes users to an Object[] with FullName key
         users.map((user, key) => {
             this.userNames.push({
@@ -186,11 +188,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         e.updateData(this.userNames, query);
     };
 
-    private async getAllLessons(): Promise<void> {
-        var response = await axios.get("http://192.168.56.1:8080/lesson/all");
-        setTimeout(async () => this.setState({ lessons: response.data }), 200);
-    }
-
     private addUserToSelectedEventData(args: SelectEventArgs) {
         const { selectedEventData } = this.state;
 
@@ -225,7 +222,6 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
         } as ILesson);
 
         lessons.concat([addedLesson]);
-        this.setState({ lessons });
     }
 
     private async addUsersToLesson(): Promise<void> {
