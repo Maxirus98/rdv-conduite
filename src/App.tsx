@@ -33,9 +33,11 @@ import Tab3 from './pages/Tab3';
 import UserService from './services/UserService';
 /* Theme variables */
 import './theme/variables.css';
+import { collection, getDocs } from 'firebase/firestore/lite';
 
-const App = (): JSX.Element => {
+const App = ({ dbInstance }): JSX.Element => {
   const userService: UserService = new UserService();
+  const [userList, setUserList] = useState([]);
   const [users, setUsers] = useState([
     {
       id: null,
@@ -46,7 +48,6 @@ const App = (): JSX.Element => {
       email: "",
     } as IUser
   ]);
-
   const [lessons, setLessons] = useState([
     {
       id: null,
@@ -67,23 +68,32 @@ const App = (): JSX.Element => {
       var response = await axios.get("http://192.168.56.1:8080/lesson/all");
       setTimeout(async () => setLessons(response.data), 200);
     }
-
+    const getAllFirestoreUsers = async () => {
+      console.log("json db", JSON.stringify(dbInstance.toJSON()));
+      var users = collection(dbInstance, "users");
+      const userSnapshot = await getDocs(users);
+      const userListTmp = userSnapshot.docs.map(doc => doc.data());
+      console.log("tmp user", userListTmp[0]);
+      setUserList(userListTmp);
+    }
+    getAllFirestoreUsers();
     getAllUsers();
     getAllLessons();
   }, [])
+
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/schedule">
-              <Tab1 userService={userService} users={users} lessons={lessons} />
+              <Tab1 userService={userService} users={users} lessons={lessons} userList={userList} />
             </Route>
             <Route exact path="/list">
-              <Tab2 userService={userService} users={users} lessons={lessons} />
+              <Tab2 userService={userService} users={users} />
             </Route>
             <Route path="/apply">
-              <Tab3 />
+              <Tab3 lessons={lessons} />
             </Route>
             <Route exact path="/">
               <Redirect to="/schedule" />

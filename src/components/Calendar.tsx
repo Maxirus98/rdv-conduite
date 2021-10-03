@@ -12,6 +12,7 @@ import { Lessons } from "../models/Lessons";
 import LessonService from "../services/LessonService";
 import UserService from "../services/UserService";
 import "./Calendar.css";
+import { collection, addDoc } from 'firebase/firestore/lite';
 
 interface ICalendarState {
     selectedEventData: ILesson;
@@ -21,6 +22,7 @@ interface ICalendarState {
 
 interface ICalendarProps {
     users: IUser[];
+    userList: any[]
     allLessons: ILesson[];
     userService: UserService;
     lessonService: LessonService;
@@ -47,8 +49,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     public render(): JSX.Element {
-        const { users, allLessons } = this.props;
-        const { lessons } = this.state;
+        const { allLessons } = this.props;
         return (
             <>
                 <ScheduleComponent
@@ -97,7 +98,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     public async componentDidMount(): Promise<void> {
-        const { users, allLessons } = this.props;
+        const { users } = this.props;
         // Changes users to an Object[] with FullName key
         users.map((user, key) => {
             this.userNames.push({
@@ -135,6 +136,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private getEditorTemplate() {
+        const { userList } = this.props;
         const { selectedEventData } = this.state;
         const getParticipants = (key: React.Key, user: IUser): JSX.Element => {
             return <IonItem key={key}>
@@ -166,6 +168,11 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
                     <IonList>
                         {selectedEventData.users && selectedEventData.users.map((user, key) => {
                             return getParticipants(key, user);
+                        })}
+                    </IonList>
+                    <IonList>
+                        {userList.length > 0 && userList.map((user, key) => {
+                            return <IonItem key={key}>{user.fullName}</IonItem>
                         })}
                     </IonList>
                     <div className="e-footer-buttons">
@@ -213,7 +220,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     private async addLesson(eventData: any): Promise<void> {
         const { lessons } = this.state;
 
-        var addedLesson: ILesson = await axios.post("http://192.168.56.1:8080/lesson/save", {
+        /*var addedLesson: ILesson = await axios.post("http://192.168.56.1:8080/lesson/save", {
             id: eventData.id || eventData.Id,
             subject: eventData.Subject || eventData.subject,
             startTime: eventData.startTime || eventData.StartTime,
@@ -221,7 +228,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
             users: eventData.users || eventData.Users
         } as ILesson);
 
-        lessons.concat([addedLesson]);
+        lessons.concat([addedLesson]);*/
+
+
     }
 
     private async addUsersToLesson(): Promise<void> {

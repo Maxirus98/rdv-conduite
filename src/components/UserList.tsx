@@ -1,6 +1,7 @@
 import { IonIcon, IonItem, IonList, IonSearchbar } from '@ionic/react';
 import { person } from 'ionicons/icons';
 import React, { Component } from 'react';
+import ILesson from '../models/ILesson';
 import { IUser } from '../models/IUser';
 import { ISharedProps } from './ISharedProps';
 

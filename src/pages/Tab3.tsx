@@ -2,7 +2,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 import LessonAppliance from '../components/LessonAppliance';
 import './Tab3.css';
 
-const Tab3: React.FC = () => {
+const Tab3 = ({ lessons }) => {
   return (
     <IonPage>
       <IonHeader>
@@ -11,7 +11,7 @@ const Tab3: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <LessonAppliance />
+        <LessonAppliance lessons={lessons} />
       </IonContent>
     </IonPage>
   );
