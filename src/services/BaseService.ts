@@ -5,5 +5,5 @@ export enum Routes {
 }
 
 export default abstract class BaseService {
-    protected readonly HOST: string = "http://192.168.56.1:8080";
+    protected readonly HOST: string = "http://192.168.56.1:8093";
 }

@@ -22,18 +22,17 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/typography.css';
 import axios from 'axios';
-import { calendar, mail, people, school } from 'ionicons/icons';
+import { calendar, people, school } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IUser } from './models/IUser';
 import ILesson from "./models/ILesson";
+import { IUser } from './models/IUser';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import UserService from './services/UserService';
 /* Theme variables */
 import './theme/variables.css';
-import { collection, getDocs } from 'firebase/firestore/lite';
 
 const App = ({ dbInstance }): JSX.Element => {
   const userService: UserService = new UserService();
@@ -61,22 +60,12 @@ const App = ({ dbInstance }): JSX.Element => {
   useEffect(() => {
     const getAllUsers = async () => {
       var allUsers = await userService.getAllUsers();
-      console.log("allUsers", allUsers);
       setUsers(JSON.parse(JSON.stringify(allUsers)).data);
     }
     const getAllLessons = async () => {
-      var response = await axios.get("http://192.168.56.1:8080/lesson/all");
+      var response = await axios.get("http://192.168.56.1:8093/lesson/all");
       setTimeout(async () => setLessons(response.data), 200);
     }
-    const getAllFirestoreUsers = async () => {
-      console.log("json db", JSON.stringify(dbInstance.toJSON()));
-      var users = collection(dbInstance, "users");
-      const userSnapshot = await getDocs(users);
-      const userListTmp = userSnapshot.docs.map(doc => doc.data());
-      console.log("tmp user", userListTmp[0]);
-      setUserList(userListTmp);
-    }
-    getAllFirestoreUsers();
     getAllUsers();
     getAllLessons();
   }, [])

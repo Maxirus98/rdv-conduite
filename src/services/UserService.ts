@@ -23,14 +23,4 @@ export default class UserService extends BaseService {
                 console.log(error);
             });
     }
-
-    public saveOrUpdateInstructor(instructor: IInstructor) {
-        axios.post(`${this.HOST}/${this.INSTRUCTOR_RESOURCE}/${Routes.Save}`, instructor)
-            .then(function (response: any) {
-                console.log(response);
-            })
-            .catch(function (error: any) {
-                console.log(error);
-            });
-    }
 }

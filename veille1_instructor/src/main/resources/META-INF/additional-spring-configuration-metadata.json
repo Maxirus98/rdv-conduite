@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.data.mongdb.uri",
+      "type": "java.lang.String",
+      "description": "Description for spring.data.mongdb.uri."
+  }
+] }

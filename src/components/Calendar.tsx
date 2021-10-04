@@ -9,7 +9,6 @@ import ReactDOM from "react-dom";
 import ILesson from "../models/ILesson";
 import { IUser } from "../models/IUser";
 import { Lessons } from "../models/Lessons";
-import LessonService from "../services/LessonService";
 import UserService from "../services/UserService";
 import "./Calendar.css";
 import { collection, addDoc } from 'firebase/firestore/lite';
@@ -25,7 +24,6 @@ interface ICalendarProps {
     userList: any[]
     allLessons: ILesson[];
     userService: UserService;
-    lessonService: LessonService;
 }
 
 export default class Calendar extends React.Component<ICalendarProps, ICalendarState> {
@@ -99,7 +97,9 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     public async componentDidMount(): Promise<void> {
         const { users } = this.props;
+        await this.getAllLessons();
         // Changes users to an Object[] with FullName key
+
         users.map((user, key) => {
             this.userNames.push({
                 FullName: user.fullName, User: Object.values(user).toString()
@@ -220,7 +220,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     private async addLesson(eventData: any): Promise<void> {
         const { lessons } = this.state;
 
-        /*var addedLesson: ILesson = await axios.post("http://192.168.56.1:8080/lesson/save", {
+        var addedLesson: ILesson = await axios.post("http://192.168.56.1:8093/lesson/save", {
             id: eventData.id || eventData.Id,
             subject: eventData.Subject || eventData.subject,
             startTime: eventData.startTime || eventData.StartTime,
@@ -228,14 +228,16 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
             users: eventData.users || eventData.Users
         } as ILesson);
 
-        lessons.concat([addedLesson]);*/
 
-
+        if (eventData.Subject === "Add title" || eventData.subject === "Add title") {
+            window.location.reload();
+        }
+        lessons.concat([addedLesson]);
     }
 
     private async addUsersToLesson(): Promise<void> {
         const { selectedEventData } = this.state;
-        await axios.post("http://192.168.56.1:8080/lesson/save", selectedEventData);
+        await axios.post("http://192.168.56.1:8093/lesson/save", selectedEventData);
         window.location.reload();
     }
 
@@ -246,7 +248,12 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private async deleteLesson(id: number): Promise<void> {
-        await axios.delete(`http://192.168.56.1:8080/lesson?id=${id}`);
+        await axios.delete(`http://192.168.56.1:8093/lesson?id=${id}`);
         window.location.reload();
+    }
+
+    private async getAllLessons(): Promise<void> {
+        var response = await axios.get("http://192.168.56.1:8093/lesson/all");
+        setTimeout(async () => this.setState({ lessons: response.data }), 200);
     }
 }
