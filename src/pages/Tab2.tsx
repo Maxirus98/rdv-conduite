@@ -1,8 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { useEffect, useState } from 'react';
 import UserList from '../components/UserList';
-import { IUser } from '../models/IUser';
-import UserService from '../services/UserService';
 import './Tab2.css';
 
 const Tab2 = ({ userService, users }): JSX.Element => {
