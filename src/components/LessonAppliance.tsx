@@ -1,7 +1,6 @@
-import { IonInput, IonItem, IonItemDivider, IonLabel, IonList } from '@ionic/react'
-import { Agenda, Day, DragAndDrop, EventClickArgs, Inject, Month, Resize, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule'
-import React, { Component } from 'react'
-import ILesson from '../models/ILesson'
+import { Agenda, Day, DragAndDrop, EventClickArgs, Inject, Month, Resize, ScheduleComponent, Week } from '@syncfusion/ej2-react-schedule';
+import React, { Component } from 'react';
+import ILesson from '../models/ILesson';
 
 interface IApplianceState {
     selectedEventData: ILesson;

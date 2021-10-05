@@ -3,31 +3,11 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-// Import the functions you need from the SDKs you need
-import { FirebaseApp, initializeApp } from "firebase/app";
-import { getFirestore, Firestore } from 'firebase/firestore/lite';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCB73m64Ex9rZgRutFtZllPKYUMaApMTtI",
-  authDomain: "rdv-conduite.firebaseapp.com",
-  projectId: "rdv-conduite",
-  storageBucket: "rdv-conduite.appspot.com",
-  messagingSenderId: "105331330297",
-  appId: "1:105331330297:web:f5c15e99ede0ba8b78a628",
-  measurementId: "G-J9653NQ5BD"
-};
-
-// Initialize Firebase
-const app: FirebaseApp = initializeApp(firebaseConfig);
-const db: Firestore = getFirestore(app);
 ReactDOM.render(
   <React.StrictMode>
-    <App dbInstance={db} />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -11,7 +11,6 @@ import { IUser } from "../models/IUser";
 import { Lessons } from "../models/Lessons";
 import UserService from "../services/UserService";
 import "./Calendar.css";
-import { collection, addDoc } from 'firebase/firestore/lite';
 
 interface ICalendarState {
     selectedEventData: ILesson;

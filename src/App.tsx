@@ -34,7 +34,7 @@ import UserService from './services/UserService';
 /* Theme variables */
 import './theme/variables.css';
 
-const App = ({ dbInstance }): JSX.Element => {
+const App = (): JSX.Element => {
   const userService: UserService = new UserService();
   const [userList, setUserList] = useState([]);
   const [users, setUsers] = useState([
@@ -99,7 +99,7 @@ const App = ({ dbInstance }): JSX.Element => {
             </IonTabButton>
             <IonTabButton tab="apply" href="/apply">
               <IonIcon icon={school} />
-              <IonLabel>Appliquer pour une leçon</IonLabel>
+              <IonLabel>Leçon</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>

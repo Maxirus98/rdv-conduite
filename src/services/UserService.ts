@@ -6,7 +6,6 @@ const axios = require('axios');
 
 export default class UserService extends BaseService {
     private readonly USER_RESOURCE: string = "user";
-    private readonly INSTRUCTOR_RESOURCE: string = "instructor";
 
     public async getAllUsers(): Promise<IUser[]> {
         var response: IUser[] = await axios.get(`${this.HOST}/${this.USER_RESOURCE}/${Routes.GetAll}`);

@@ -2,7 +2,6 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 import { useEffect, useState } from 'react';
 import UserList from '../components/UserList';
 import { IUser } from '../models/IUser';
-import { Users } from '../models/Users';
 import UserService from '../services/UserService';
 import './Tab2.css';
 
